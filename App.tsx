@@ -14,7 +14,7 @@ import CartScreen from './features/cart/CartScreen';
 import Header from './components/common/Header';
 import OrderDetailScreen from './features/orders/OrderDetailScreen';
 import { User, Order } from './types';
-import { MOCK_USER } from './services/mockApiService';
+import { MOCK_USER } from './services/api/mockApiService';
 
 export enum Screen {
   Shopping,

@@ -4,7 +4,8 @@ import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useAppContext } from '../../../context/AppContext';
 import { generateMealPlan } from '../../../services/geminiService';
 import Spinner from '../../../components/common/Spinner';
-import { MOCK_PRODUCTS } from '../../../services/mockApiService';
+import { MOCK_PRODUCTS } from '../../../services/api/mockApiService';
+import { Product } from '../../../types';
 
 interface Meal {
     name: string;
@@ -43,7 +44,7 @@ const AiMenuSuggestion: React.FC = () => {
       const uniqueIngredients = [...new Set(allIngredients)];
 
       uniqueIngredients.forEach(ingredientName => {
-        const productToAdd = MOCK_PRODUCTS.find(p => p.name.toLowerCase().includes(String(ingredientName).toLowerCase()));
+        const productToAdd = MOCK_PRODUCTS.find((p: Product) => p.name.toLowerCase().includes(String(ingredientName).toLowerCase()));
         if(productToAdd){
             addToCart(productToAdd, 1);
         }

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { Product } from '../../types';
-import { fetchProducts } from '../../services/mockApiService';
+import { fetchProducts } from '../../services/api/mockApiService';
 import Spinner from '../../components/common/Spinner';
 import AiMenuSuggestion from './components/AiMenuSuggestion';
 import ProductList from './components/ProductList';

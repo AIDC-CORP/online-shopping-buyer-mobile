@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Order, OrderStatus } from '../../types';
-import { fetchOrders } from '../../services/mockApiService';
+import { fetchOrders } from '../../services/api/mockApiService';
 import Spinner from '../../components/common/Spinner';
 
 const getStatusInfo = (status: OrderStatus) => {

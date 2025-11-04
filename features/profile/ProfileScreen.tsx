@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useAppContext } from '../../context/AppContext';
-import { updateUserProfile } from '../../services/mockApiService';
+import { updateUserProfile } from '../../services/api/mockApiService';
 import { User } from '../../types';
 
 interface ProfileScreenProps {
