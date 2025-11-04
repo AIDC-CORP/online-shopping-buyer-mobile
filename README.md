@@ -1,43 +1,27 @@
-# React Native Expo - AI Meal Planner & Grocery Assistant<div align="center">
+# AI Meal Planner & Grocery Assistant
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<div align="center">
+<img width="1200" height="475" alt="AI Meal Planner Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 
-This project has been refactored to work with **React Native Expo**.</div>
+A React Native Expo app that provides AI-powered meal planning and grocery shopping assistance using Google Gemini AI.
+</div>
 
+## 📋 Prerequisites
 
-
-## 📋 Prerequisites# Run and deploy your AI Studio app
-
-
-
-- Node.js 18+ installedThis contains everything you need to run your app locally.
-
-- npm or yarn package manager
-
-- Expo Go app on your mobile device (for testing)View your app in AI Studio: https://ai.studio/apps/drive/1xChYGIVv_eyWN5sn8IS0wu5EFMFqtUSO
-
+- Node.js 18+ installed
+- yarn package manager
+- Expo Go app on your mobile device (for testing)
 - Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-
-## Run Locally
 
 ## 🚀 Setup Instructions
 
-**Prerequisites:**  Node.js
-
 ### 1. Install Dependencies
 
+```bash
+npm install
+```
 
-
-```bash1. Install dependencies:
-
-npm install   `npm install`
-
-```2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-
-3. Run the app:
-
-### 2. Configure Environment Variables   `npm run dev`
-
+### 2. Configure Environment Variables
 
 Create a `.env` file in the root directory:
 
@@ -100,28 +84,34 @@ npm run web
 ## 📂 Project Structure
 
 ```
-├── App.tsx                 # Main app component
+├── App.tsx                 # Main app component with custom navigation
 ├── index.tsx              # Entry point
 ├── components/            # Reusable UI components
-├── features/              # Feature-specific screens
-│   ├── auth/             # Login screen
-│   ├── shopping/         # Shopping screen
-│   ├── cart/             # Cart screen
-│   ├── orders/           # Order history
-│   ├── profile/          # User profile
-│   └── support/          # Chatbot support
-├── services/              # API services
-├── context/               # React context
-└── types.ts              # TypeScript types
+│   ├── common/           # Shared components (Header, BottomNavBar, etc.)
+│   └── icons/            # Icon components
+├── features/              # Feature-specific modules
+│   ├── auth/             # Authentication screens and logic
+│   ├── shopping/         # Shopping screens and AI meal planning
+│   ├── cart/             # Cart management
+│   ├── orders/           # Order history and details
+│   ├── profile/          # User profile management
+│   └── support/          # AI chatbot support
+├── services/              # API services and integrations
+│   ├── geminiService.ts  # AI integration (currently mocked)
+│   └── api/              # Mock API services
+├── context/               # React context for global state
+├── types.ts              # TypeScript type definitions
+└── assets/               # Static assets and images
 ```
 
 ## 🔧 Configuration Files
 
 - `app.json` - Expo app configuration
 - `babel.config.js` - Babel configuration for React Native
-- `metro.config.js` - Metro bundler config with NativeWind
+- `metro.config.js` - Metro bundler config with NativeWind integration
 - `tailwind.config.js` - Tailwind CSS configuration
 - `tsconfig.json` - TypeScript configuration
+- `eas.json` - Expo Application Services configuration
 
 ## 🎨 Styling
 
@@ -132,6 +122,10 @@ This project uses **NativeWind 4**, which brings Tailwind CSS to React Native. Y
   <Text className="text-xl font-bold text-green-600">Hello World</Text>
 </View>
 ```
+
+**Important Notes:**
+- No styled HOCs - use `className` directly on React Native components
+- NativeWind 4 removed the `styled()` wrapper functions
 
 ## 🐛 Troubleshooting
 
@@ -151,11 +145,21 @@ npm install
 npm install --save-dev @types/react @types/react-native
 ```
 
-## 📝 Notes
+**Clear all caches:**
+```bash
+rm -rf node_modules .expo .metro-cache
+npm install
+npx expo start -c
+```
+
+## 📝 Development Notes
 
 - The app uses mock data for products and orders (no backend required)
 - Gemini API is used for AI meal planning and chatbot features
-- Make sure to add asset files (icon.png, splash.png, adaptive-icon.png) in the `assets/` folder for production builds
+- All AI services currently use mock responses for development
+- Vietnamese localization throughout the UI
+- Custom navigation system (no React Navigation library)
+- Context-based state management for user and cart data
 
 ## 🚢 Building for Production
 
@@ -165,9 +169,23 @@ For production builds, you can use Expo's build service or build locally:
 # Local build for Android
 npx expo run:android --variant release
 
-# Local build for iOS  
+# Local build for iOS
 npx expo run:ios --configuration Release
 ```
+
+Make sure to add asset files (icon.png, splash.png, adaptive-icon.png) in the `assets/` folder for production builds.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is private and proprietary.
 
 ---
 
