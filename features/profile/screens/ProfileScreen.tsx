@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { ProfileScreenProps } from '../index';
 import { useProfile } from '../hooks/useProfile';
 
@@ -165,7 +165,23 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
       </View>
       
       <TouchableOpacity
-        onPress={onLogout}
+        onPress={() => {
+          Alert.alert(
+            'Xác nhận đăng xuất',
+            'Bạn có chắc chắn muốn đăng xuất?',
+            [
+              {
+                text: 'Hủy',
+                style: 'cancel',
+              },
+              {
+                text: 'Đăng xuất',
+                style: 'destructive',
+                onPress: onLogout,
+              },
+            ]
+          );
+        }}
         style={{
           width: '100%',
           paddingHorizontal: 16,
