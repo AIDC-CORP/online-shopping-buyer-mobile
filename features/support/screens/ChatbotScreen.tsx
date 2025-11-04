@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { ChatMessage } from '../../../types';
 import { SparklesIcon } from '../../../components/icons/Icons';
 import { useChatbot } from '../hooks/useChatbot';
@@ -8,24 +8,38 @@ import { useChatbot } from '../hooks/useChatbot';
 const ChatbotScreen: React.FC = () => {
   const { messages, input, setInput, isLoading, flatListRef, handleSend, user } = useChatbot();
 
+  useEffect(() => {
+    const showListener = Keyboard.addListener('keyboardDidShow', () => {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    });
+    return () => {
+      showListener.remove();
+    };
+  }, []);
+
   return (
-     <View style={{ flex: 1, backgroundColor: '#ffffff', marginHorizontal: 16, marginVertical: 8, borderRadius: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={110}
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+    >
+      <View style={{ flex: 1, backgroundColor: '#ffffff', marginHorizontal: 16, marginVertical: 8, borderRadius: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }}>
         <View style={{ paddingHorizontal: 16, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: '#e5e7eb', flexDirection: 'row', alignItems: 'center' }}>
             <SparklesIcon size={24} color="#34d399"/>
             <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1f2937', marginLeft: 8 }}>Trợ lý AI</Text>
         </View>
       
-        <FlatList
+        <ScrollView
             ref={flatListRef}
-            data={messages}
-            keyExtractor={(item) => item.id}
-            renderItem={({item}) => (
-                <View style={{
+            keyboardShouldPersistTaps="handled"
+            onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+            onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
+            contentContainerStyle={{ paddingHorizontal: 0, paddingVertical: 8 }}
+        >
+            {messages.map((item) => (
+                <View key={item.id} style={{
                   flexDirection: 'row',
                   alignItems: 'flex-end',
                   gap: 8,
@@ -47,8 +61,8 @@ const ChatbotScreen: React.FC = () => {
                     </View>
                     {item.sender === 'user' && <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#d1d5db', alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#4b5563', fontSize: 12, fontWeight: 'bold' }}>{user?.name.charAt(0)}</Text></View>}
                 </View>
-            )}
-            ListFooterComponent={() => isLoading ? (
+            ))}
+            {isLoading && (
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8, marginVertical: 8, justifyContent: 'flex-start', paddingHorizontal: 16 }}>
                     <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#10b981', alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#ffffff', fontSize: 12, fontWeight: 'bold' }}>AI</Text></View>
                     <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, backgroundColor: '#e5e7eb' }}>
@@ -59,11 +73,8 @@ const ChatbotScreen: React.FC = () => {
                         </View>
                     </View>
                 </View>
-            ) : null}
-            onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-            onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
-            contentContainerStyle={{ paddingHorizontal: 0, paddingVertical: 8 }}
-        />
+            )}
+        </ScrollView>
 
         <View style={{ paddingHorizontal: 8, paddingVertical: 8, borderTopWidth: 1, borderTopColor: '#e5e7eb', backgroundColor: '#f3f4f6' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -101,8 +112,8 @@ const ChatbotScreen: React.FC = () => {
             </TouchableOpacity>
             </View>
         </View>
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
