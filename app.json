@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#10b981"
@@ -19,8 +20,6 @@
     "android": {
       "package": "com.aimealplanner.groceryassistant"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "web": {}
   }
 }
