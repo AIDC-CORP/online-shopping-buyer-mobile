@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { View, Text, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
-import { useAppContext } from '../../context/AppContext';
 import { TrashIcon } from '../../components/icons/Icons';
+import { useCart } from './hooks/useCart';
 
 const CartScreen: React.FC = () => {
-  const { cart, removeFromCart, updateCartItemQuantity, cartTotal, clearCart } = useAppContext();
+  const { cart, removeFromCart, updateCartItemQuantity, cartTotal, shippingFee, totalWithShipping, clearCart } = useCart();
 
   if (cart.length === 0) {
     return (
@@ -15,8 +15,6 @@ const CartScreen: React.FC = () => {
       </View>
     );
   }
-
-  const shippingFee = 20000;
 
   return (
     <View style={{ flex: 1, backgroundColor: '#f9fafb' }}>
@@ -106,7 +104,7 @@ const CartScreen: React.FC = () => {
             marginBottom: 12,
           }}>
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Tổng cộng:</Text>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{(cartTotal + shippingFee).toLocaleString('vi-VN')}đ</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{totalWithShipping.toLocaleString('vi-VN')}đ</Text>
           </View>
         </View>
         <TouchableOpacity style={{
