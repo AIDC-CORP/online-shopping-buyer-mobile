@@ -1,44 +1,24 @@
 
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, Platform, ActivityIndicator, ScrollView } from 'react-native';
 import { SparklesIcon } from '../../components/icons/Icons';
-
-interface LoginScreenProps {
-  onLogin: () => void;
-}
+import { LoginScreenProps } from './index';
+import { useLogin } from './hooks/useLogin';
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
-  const [step, setStep] = useState(1);
-  const [phone, setPhone] = useState('');
-  const [otp, setOtp] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handlePhoneSubmit = useCallback(() => {
-    if (phone.length < 9) {
-      setError('Vui lòng nhập số điện thoại hợp lệ.');
-      return;
-    }
-    setError('');
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setStep(2);
-    }, 1000);
-  }, [phone]);
-
-  const handleOtpSubmit = useCallback(() => {
-    if (otp !== '123456') {
-      setError('Mã OTP không hợp lệ. Vui lòng thử lại.');
-      return;
-    }
-    setError('');
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      onLogin();
-    }, 1000);
-  }, [otp, onLogin]);
+  const {
+    step,
+    setStep,
+    phone,
+    setPhone,
+    otp,
+    setOtp,
+    isLoading,
+    error,
+    setError,
+    handlePhoneSubmit,
+    handleOtpSubmit,
+  } = useLogin(onLogin);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f0f9ff' }}>
