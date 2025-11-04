@@ -53,8 +53,8 @@ yarn start
 
 ### Testing
 - **Expo Go**: Scan QR code for physical device testing
-- **Emulators**: `npm run ios` / `npm run android`
-- **Web**: `npm run web` (experimental)
+- **Emulators**: `yarn ios` / `yarn android`
+- **Web**: `yarn web` (experimental)
 
 ### Common Commands
 - `npx expo start -c`: Clear Metro cache

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { useProfile } from '../../hooks/useProfile';
+import { useFamilyMember } from '../../hooks/useFamilyMember';
 
 interface AddProfileProps {
   onClose: () => void;
 }
 
 const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
-  const { handleAddFamilyMember, isLoading, activityLevels, activityLevelLabels } = useProfile();
+  const { handleAddFamilyMember, isLoading, activityLevels, activityLevelLabels } = useFamilyMember();
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [location, setLocation] = useState('');

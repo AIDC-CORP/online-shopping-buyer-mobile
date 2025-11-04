@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Modal, Alert } from 'react-native';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../../context/AppContext';
 
 interface TopUpDialogProps {
   visible: boolean;
