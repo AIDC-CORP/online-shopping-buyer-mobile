@@ -1,0 +1,5 @@
+{
+  "name": "AI Meal Planner & Grocery Assistant",
+  "description": "An intelligent application that provides AI-driven meal suggestions, manages your grocery shopping, tracks orders, and helps you manage your budget. Based on your health profile, the app generates personalized meal plans and simplifies your shopping experience.",
+  "requestFramePermissions": []
+}

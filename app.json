@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "AI Meal Planner & Grocery Assistant",
+    "slug": "ai-meal-planner-grocery-assistant",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#10b981"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aimealplanner.groceryassistant"
+    },
+    "android": {
+      "package": "com.aimealplanner.groceryassistant"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
