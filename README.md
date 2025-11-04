@@ -18,7 +18,7 @@ A React Native Expo app that provides AI-powered meal planning and grocery shopp
 ### 1. Install Dependencies
 
 ```bash
-npm install
+yarn install
 ```
 
 ### 2. Configure Environment Variables
@@ -38,7 +38,7 @@ EXPO_PUBLIC_GEMINI_API_KEY=your_actual_api_key_here
 ### 3. Start the Development Server
 
 ```bash
-npm start
+yarn start
 ```
 
 This will start the Expo development server. You'll see a QR code in your terminal.
@@ -136,19 +136,19 @@ npx expo start -c
 
 **Dependencies issues:**
 ```bash
-rm -rf node_modules package-lock.json
-npm install
+rm -rf node_modules yarn.lock
+yarn install
 ```
 
 **TypeScript errors:**
 ```bash
-npm install --save-dev @types/react @types/react-native
+yarn add -D @types/react @types/react-native
 ```
 
 **Clear all caches:**
 ```bash
 rm -rf node_modules .expo .metro-cache
-npm install
+yarn install
 npx expo start -c
 ```
 

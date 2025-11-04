@@ -16,10 +16,10 @@ fi
 # Check if node_modules exists
 if [ ! -d node_modules ]; then
     echo "📦 Installing dependencies..."
-    npm install
+    yarn install
     echo ""
 fi
 
 # Start Expo
 echo "🎉 Starting Expo development server..."
-npm start
+yarn start
