@@ -4,6 +4,7 @@ import { User, CartItem, Product } from '../types';
 
 interface AppContextType {
   user: User | null;
+  setUser: (user: User) => void;
   cart: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
@@ -19,7 +20,8 @@ interface AppContextProviderProps {
   user: User;
 }
 
-export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children, user }) => {
+export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children, user: initialUser }) => {
+  const [user, setUser] = useState<User>(initialUser);
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const addToCart = useCallback((product: Product, quantity: number = 1) => {
@@ -60,6 +62,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
 
   const value = {
     user,
+    setUser,
     cart,
     addToCart,
     removeFromCart,

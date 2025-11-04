@@ -4,11 +4,17 @@ export const MOCK_USER: User = {
   id: 'user-123',
   phone: '0901234567',
   name: 'Nguyễn Văn A',
+  age: 30,
+  location: 'Hồ Chí Minh',
   height: 175,
   weight: 70,
   activityLevel: 'medium',
   allergies: ['Đậu phộng'],
   budget: 1500000,
+  familyMembers: [
+    { name: 'Nguyễn Thị B', age: 28, location: 'Hồ Chí Minh', height: 165, weight: 55, activityLevel: 'medium', allergies: [] },
+    { name: 'Nguyễn Văn C', age: 5, location: 'Hồ Chí Minh', height: 110, weight: 20, activityLevel: 'high', allergies: ['Sữa'] },
+  ],
 };
 
 export const MOCK_PRODUCTS: Product[] = [
@@ -75,4 +81,14 @@ export const updateUserProfile = (user: User): Promise<User> => {
     console.log("Updating user profile:", user);
     // In a real app, this would merge with the existing user object
     return apiDelay(user, 800);
+}
+
+export const addFamilyMember = (member: { name: string; age: number; location: string; height: number; weight: number; activityLevel: 'low' | 'medium' | 'high'; allergies: string[] }): Promise<{ name: string; age: number; location: string; height: number; weight: number; activityLevel: 'low' | 'medium' | 'high'; allergies: string[] }> => {
+    console.log("Adding family member:", member);
+    return apiDelay(member, 500);
+}
+
+export const updateFamilyMember = (member: { name: string; age: number; location: string; height: number; weight: number; activityLevel: 'low' | 'medium' | 'high'; allergies: string[] }): Promise<{ name: string; age: number; location: string; height: number; weight: number; activityLevel: 'low' | 'medium' | 'high'; allergies: string[] }> => {
+    console.log("Updating family member:", member);
+    return apiDelay(member, 500);
 }

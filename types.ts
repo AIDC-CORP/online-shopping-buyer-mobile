@@ -3,11 +3,22 @@ export interface User {
   id: string;
   phone: string;
   name: string;
+  age: number;
+  location: string;
   height: number; // in cm
   weight: number; // in kg
   activityLevel: 'low' | 'medium' | 'high';
   allergies: string[];
   budget: number; // optional budget per meal/day
+  familyMembers: { 
+    name: string; 
+    age: number; 
+    location: string; 
+    height: number; 
+    weight: number; 
+    activityLevel: 'low' | 'medium' | 'high'; 
+    allergies: string[] 
+  }[];
 }
 
 export interface Product {
