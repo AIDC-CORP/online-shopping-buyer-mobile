@@ -1,12 +1,8 @@
 
 import React from 'react';
 import { FlatList, View, Text } from 'react-native';
-import { Product } from '../../../types';
 import ProductCard from './ProductCard';
-
-interface ProductListProps {
-  products: Product[];
-}
+import { ProductListProps } from '../index';
 
 const ProductList: React.FC<ProductListProps> = ({ products }) => {
   if (products.length === 0) {

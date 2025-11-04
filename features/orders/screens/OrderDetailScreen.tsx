@@ -1,14 +1,10 @@
 
 import React from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
-import { Order, OrderStatus, CartItem } from '../../types';
-import { ChevronLeftIcon } from '../../components/icons/Icons';
-import { useAppContext } from '../../context/AppContext';
-
-interface OrderDetailScreenProps {
-  order: Order;
-  onBack: () => void;
-}
+import { Order, OrderStatus, CartItem } from '../../../types';
+import { ChevronLeftIcon } from '../../../components/icons/Icons';
+import { OrderDetailScreenProps } from '../index';
+import { useOrderDetail } from '../hooks/useOrderDetail';
 
 const formatCurrency = (amount: number) => {
     return amount.toLocaleString('vi-VN') + 'đ';
@@ -24,14 +20,7 @@ const statusMap: Record<OrderStatus, { text: string; bg: string; text_clr: strin
 };
 
 const OrderDetailScreen: React.FC<OrderDetailScreenProps> = ({ order, onBack }) => {
-    const { addToCart } = useAppContext();
-
-    const handleBuyAgain = () => {
-        order.items.forEach(item => {
-            addToCart(item.product, item.quantity);
-        });
-        Alert.alert('Thành công', 'Các sản phẩm đã được thêm vào giỏ hàng!');
-    };
+    const { handleBuyAgain } = useOrderDetail(order);
 
     const orderStatus = statusMap[order.status] || statusMap.pending;
 

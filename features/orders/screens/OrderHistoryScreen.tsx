@@ -1,9 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { Order, OrderStatus } from '../../types';
-import { fetchOrders } from '../../services/api/mockApiService';
-import Spinner from '../../components/common/Spinner';
+import { Order, OrderStatus } from '../../../types';
+import Spinner from '../../../components/common/Spinner';
+import { OrderHistoryScreenProps } from '../index';
+import { useOrderHistory } from '../hooks/useOrderHistory';
 
 const getStatusInfo = (status: OrderStatus) => {
   switch (status) {
@@ -17,23 +18,8 @@ const getStatusInfo = (status: OrderStatus) => {
   }
 };
 
-interface OrderHistoryScreenProps {
-  onSelectOrder: (order: Order) => void;
-}
-
 const OrderHistoryScreen: React.FC<OrderHistoryScreenProps> = ({ onSelectOrder }) => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadOrders = async () => {
-      setIsLoading(true);
-      const fetchedOrders = await fetchOrders();
-      setOrders(fetchedOrders);
-      setIsLoading(false);
-    };
-    loadOrders();
-  }, []);
+  const { orders, isLoading } = useOrderHistory();
 
   if (isLoading) {
     return <Spinner />;

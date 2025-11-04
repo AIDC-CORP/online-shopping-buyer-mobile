@@ -1,12 +1,8 @@
 
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Product } from '../../../types';
 import { useAppContext } from '../../../context/AppContext';
-
-interface ProductCardProps {
-  product: Product;
-}
+import { ProductCardProps } from '../index';
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useAppContext();

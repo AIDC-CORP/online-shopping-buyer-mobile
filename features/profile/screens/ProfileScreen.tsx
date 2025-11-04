@@ -1,33 +1,20 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useAppContext } from '../../context/AppContext';
-import { updateUserProfile } from '../../services/api/mockApiService';
-import { User } from '../../types';
-
-interface ProfileScreenProps {
-  onLogout: () => void;
-}
+import { ProfileScreenProps } from '../index';
+import { useProfile } from '../hooks/useProfile';
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
-  const { user } = useAppContext();
-  const [profile, setProfile] = useState<User>(user!);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleInputChange = <K extends keyof User>(key: K, value: User[K]) => {
-    setProfile(prev => ({ ...prev, [key]: value }));
-  };
-  
-  const handleSave = async () => {
-    setIsLoading(true);
-    await updateUserProfile(profile);
-    setIsLoading(false);
-    setIsEditing(false);
-  }
-  
-  const activityLevels: ('low' | 'medium' | 'high')[] = ['low', 'medium', 'high'];
-  const activityLevelLabels = { low: 'Thấp', medium: 'Trung bình', high: 'Cao' };
+  const {
+    profile,
+    isEditing,
+    isLoading,
+    setIsEditing,
+    handleInputChange,
+    handleSave,
+    activityLevels,
+    activityLevelLabels,
+  } = useProfile();
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb' }} contentContainerStyle={{ padding: 16 }}>

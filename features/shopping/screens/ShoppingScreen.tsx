@@ -1,44 +1,13 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
-import { Product } from '../../types';
-import { fetchProducts } from '../../services/api/mockApiService';
-import Spinner from '../../components/common/Spinner';
-import AiMenuSuggestion from './components/AiMenuSuggestion';
-import ProductList from './components/ProductList';
-
-enum ShoppingMode {
-  AI,
-  Manual,
-}
+import Spinner from '../../../components/common/Spinner';
+import AiMenuSuggestion from '../components/AiMenuSuggestion';
+import ProductList from '../components/ProductList';
+import { useShopping, ShoppingMode } from '../hooks/useShopping';
 
 const ShoppingScreen: React.FC = () => {
-  const [mode, setMode] = useState<ShoppingMode>(ShoppingMode.AI);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const loadProducts = useCallback(async (currentSearchTerm: string) => {
-    setIsLoading(true);
-    try {
-      const fetchedProducts = await fetchProducts(currentSearchTerm);
-      setProducts(fetchedProducts);
-    } catch (error) {
-      console.error("Failed to fetch products", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (mode === ShoppingMode.Manual) {
-      loadProducts(searchTerm);
-    }
-  }, [mode]);
-  
-  const handleSearch = () => {
-    loadProducts(searchTerm);
-  };
+  const { mode, setMode, products, isLoading, searchTerm, setSearchTerm, handleSearch } = useShopping();
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb' }} contentContainerStyle={{ padding: 16 }}>

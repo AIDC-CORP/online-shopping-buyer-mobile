@@ -4,15 +4,15 @@ import React, { useState, useCallback } from 'react';
 // FIX: Removed styled HOC from nativewind as it is no longer needed. ClassName props can be used directly.
 import { SafeAreaView, StatusBar, View, Platform } from 'react-native';
 import { AppContextProvider } from './context/AppContext';
-import LoginScreen from './features/auth/LoginScreen';
-import ShoppingScreen from './features/shopping/ShoppingScreen';
-import OrderHistoryScreen from './features/orders/OrderHistoryScreen';
-import ProfileScreen from './features/profile/ProfileScreen';
-import ChatbotScreen from './features/support/ChatbotScreen';
+import LoginScreen from './features/auth/screens/LoginScreen';
+import ShoppingScreen from './features/shopping/screens/ShoppingScreen';
+import OrderHistoryScreen from './features/orders/screens/OrderHistoryScreen';
+import ProfileScreen from './features/profile/screens/ProfileScreen';
+import ChatbotScreen from './features/support/screens/ChatbotScreen';
 import BottomNavBar from './components/common/BottomNavBar';
-import CartScreen from './features/cart/CartScreen';
+import CartScreen from './features/cart/screens/CartScreen';
 import Header from './components/common/Header';
-import OrderDetailScreen from './features/orders/OrderDetailScreen';
+import OrderDetailScreen from './features/orders/screens/OrderDetailScreen';
 import { User, Order } from './types';
 import { MOCK_USER } from './services/api/mockApiService';
 

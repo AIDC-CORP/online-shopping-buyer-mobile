@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, Platform, ActivityIndicator, ScrollView } from 'react-native';
-import { SparklesIcon } from '../../components/icons/Icons';
-import { LoginScreenProps } from './index';
-import { useLogin } from './hooks/useLogin';
+import { SparklesIcon } from '../../../components/icons/Icons';
+import { LoginScreenProps } from '../index';
+import { useLogin } from '../hooks/useLogin';
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const {

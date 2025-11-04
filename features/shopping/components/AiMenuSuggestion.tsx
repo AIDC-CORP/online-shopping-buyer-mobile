@@ -6,12 +6,7 @@ import { generateMealPlan } from '../../../services/geminiService';
 import Spinner from '../../../components/common/Spinner';
 import { MOCK_PRODUCTS } from '../../../services/api/mockApiService';
 import { Product } from '../../../types';
-
-interface Meal {
-    name: string;
-    dish: string;
-    ingredients: string[];
-}
+import { Meal } from '../index';
 
 const AiMenuSuggestion: React.FC = () => {
   const { user, addToCart } = useAppContext();

@@ -1,54 +1,12 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform, Alert } from 'react-native';
-import { ChatMessage } from '../../types';
-import { getChatbotResponse } from '../../services/geminiService';
-import { SparklesIcon } from '../../components/icons/Icons';
-import { useAppContext } from '../../context/AppContext';
+import React from 'react';
+import { View, Text, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
+import { ChatMessage } from '../../../types';
+import { SparklesIcon } from '../../../components/icons/Icons';
+import { useChatbot } from '../hooks/useChatbot';
 
 const ChatbotScreen: React.FC = () => {
-  const { user } = useAppContext();
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: '1', text: `Chào ${user?.name}! Tôi là trợ lý AI Fresh. Tôi có thể giúp gì cho bạn hôm nay?`, sender: 'bot' }
-  ]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const flatListRef = useRef<FlatList>(null);
-
-  const handleSend = async () => {
-    if (input.trim() === '' || isLoading) return;
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      text: input,
-      sender: 'user',
-    };
-    
-    const updatedHistory = [...messages, userMessage];
-    setMessages(updatedHistory);
-    setInput('');
-    setIsLoading(true);
-
-    try {
-      const botResponseText = await getChatbotResponse(updatedHistory);
-      const botMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        text: botResponseText,
-        sender: 'bot',
-      };
-      setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
-      console.error("Chatbot error:", error);
-      const errorMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        text: "Tôi đang gặp sự cố kết nối. Vui lòng thử lại.",
-        sender: 'bot',
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { messages, input, setInput, isLoading, flatListRef, handleSend, user } = useChatbot();
 
   return (
      <View style={{ flex: 1, backgroundColor: '#ffffff', marginHorizontal: 16, marginVertical: 8, borderRadius: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }}>
