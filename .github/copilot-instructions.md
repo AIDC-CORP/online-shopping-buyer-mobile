@@ -47,8 +47,8 @@ features/
 ```bash
 cp .env.example .env
 # Add EXPO_PUBLIC_GEMINI_API_KEY to .env
-npm install
-npm start
+yarn install
+yarn start
 ```
 
 ### Testing
@@ -58,7 +58,7 @@ npm start
 
 ### Common Commands
 - `npx expo start -c`: Clear Metro cache
-- `rm -rf node_modules && npm install`: Clean reinstall
+- `rm -rf node_modules && yarn install`: Clean reinstall
 - `./start.sh`: Automated setup and start script
 
 ## Code Patterns & Conventions

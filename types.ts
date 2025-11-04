@@ -10,6 +10,7 @@ export interface User {
   activityLevel: 'low' | 'medium' | 'high';
   allergies: string[];
   budget: number; // optional budget per meal/day
+  walletBalance: number; // wallet balance in VND
   familyMembers: { 
     name: string; 
     age: number; 
@@ -49,4 +50,15 @@ export interface ChatMessage {
     id: string;
     text: string;
     sender: 'user' | 'bot';
+}
+
+export type WalletTransactionType = 'top_up' | 'payment' | 'refund';
+
+export interface WalletTransaction {
+  id: string;
+  type: WalletTransactionType;
+  amount: number;
+  description: string;
+  date: string;
+  orderId?: string; // for payment transactions
 }

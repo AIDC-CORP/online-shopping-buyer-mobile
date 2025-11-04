@@ -1,6 +1,6 @@
 
 import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
-import { User, CartItem, Product } from '../types';
+import { User, CartItem, Product, WalletTransaction } from '../types';
 
 interface AppContextType {
   user: User | null;
@@ -11,6 +11,10 @@ interface AppContextType {
   updateCartItemQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   cartTotal: number;
+  walletTransactions: WalletTransaction[];
+  addToWallet: (amount: number, description?: string) => void;
+  deductFromWallet: (amount: number, orderId?: string) => boolean;
+  walletBalance: number;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -23,6 +27,7 @@ interface AppContextProviderProps {
 export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children, user: initialUser }) => {
   const [user, setUser] = useState<User>(initialUser);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [walletTransactions, setWalletTransactions] = useState<WalletTransaction[]>([]);
 
   const addToCart = useCallback((product: Product, quantity: number = 1) => {
     setCart(prevCart => {
@@ -60,6 +65,37 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
 
   const cartTotal = cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
+  const addToWallet = useCallback((amount: number, description: string = 'Nạp tiền vào ví') => {
+    const transaction: WalletTransaction = {
+      id: `txn-${Date.now()}`,
+      type: 'top_up',
+      amount,
+      description,
+      date: new Date().toISOString(),
+    };
+    setWalletTransactions(prev => [transaction, ...prev]);
+    setUser(prevUser => prevUser ? { ...prevUser, walletBalance: prevUser.walletBalance + amount } : prevUser);
+  }, []);
+
+  const deductFromWallet = useCallback((amount: number, orderId?: string): boolean => {
+    if (!user || user.walletBalance < amount) {
+      return false;
+    }
+    const transaction: WalletTransaction = {
+      id: `txn-${Date.now()}`,
+      type: 'payment',
+      amount: -amount,
+      description: `Thanh toán đơn hàng ${orderId || ''}`,
+      date: new Date().toISOString(),
+      orderId,
+    };
+    setWalletTransactions(prev => [transaction, ...prev]);
+    setUser(prevUser => prevUser ? { ...prevUser, walletBalance: prevUser.walletBalance - amount } : prevUser);
+    return true;
+  }, [user]);
+
+  const walletBalance = user?.walletBalance || 0;
+
   const value = {
     user,
     setUser,
@@ -69,6 +105,10 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     updateCartItemQuantity,
     clearCart,
     cartTotal,
+    walletTransactions,
+    addToWallet,
+    deductFromWallet,
+    walletBalance,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

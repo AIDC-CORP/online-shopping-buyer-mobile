@@ -1,4 +1,4 @@
-import { User, Product, Order } from '../../types';
+import { User, Product, Order, WalletTransaction } from '../../types';
 
 export const MOCK_USER: User = {
   id: 'user-123',
@@ -11,6 +11,7 @@ export const MOCK_USER: User = {
   activityLevel: 'medium',
   allergies: ['Đậu phộng'],
   budget: 1500000,
+  walletBalance: 500000, // 500k VND
   familyMembers: [
     { name: 'Nguyễn Thị B', age: 28, location: 'Hồ Chí Minh', height: 165, weight: 55, activityLevel: 'medium', allergies: [] },
     { name: 'Nguyễn Văn C', age: 5, location: 'Hồ Chí Minh', height: 110, weight: 20, activityLevel: 'high', allergies: ['Sữa'] },
@@ -61,6 +62,32 @@ export const MOCK_ORDERS: Order[] = [
   }
 ];
 
+// Mock Wallet Transactions
+export const MOCK_WALLET_TRANSACTIONS: WalletTransaction[] = [
+  {
+    id: 'txn-001',
+    type: 'top_up',
+    amount: 1000000,
+    description: 'Nạp tiền qua Momo',
+    date: '2024-07-25T10:00:00Z',
+  },
+  {
+    id: 'txn-002',
+    type: 'payment',
+    amount: -370000,
+    description: 'Thanh toán đơn hàng DH001',
+    date: '2024-07-28T14:30:00Z',
+    orderId: 'DH001',
+  },
+  {
+    id: 'txn-003',
+    type: 'top_up',
+    amount: 500000,
+    description: 'Nạp tiền qua thẻ tín dụng',
+    date: '2024-07-30T09:15:00Z',
+  },
+];
+
 // --- API Simulation ---
 
 const apiDelay = <T,>(data: T, delay: number = 500): Promise<T> => 
@@ -91,4 +118,13 @@ export const addFamilyMember = (member: { name: string; age: number; location: s
 export const updateFamilyMember = (member: { name: string; age: number; location: string; height: number; weight: number; activityLevel: 'low' | 'medium' | 'high'; allergies: string[] }): Promise<{ name: string; age: number; location: string; height: number; weight: number; activityLevel: 'low' | 'medium' | 'high'; allergies: string[] }> => {
     console.log("Updating family member:", member);
     return apiDelay(member, 500);
+}
+
+export const fetchWalletTransactions = (): Promise<WalletTransaction[]> => apiDelay(MOCK_WALLET_TRANSACTIONS);
+
+export const topUpWallet = (amount: number, method: string): Promise<{ success: boolean; newBalance: number }> => {
+    console.log(`Topping up wallet with ${amount} via ${method}`);
+    const newBalance = MOCK_USER.walletBalance + amount;
+    // In a real app, this would update the user's balance on the server
+    return apiDelay({ success: true, newBalance }, 1000);
 }

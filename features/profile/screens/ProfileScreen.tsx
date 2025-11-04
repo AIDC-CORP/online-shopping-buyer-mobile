@@ -6,6 +6,9 @@ import { useProfile } from '../hooks/useProfile';
 import EditProfile from '../dialog/EditProfile';
 import AddProfile from '../dialog/AddProfile';
 import EditFamilyMember from '../dialog/EditFamilyMember';
+import WalletCard from '../components/WalletCard';
+import TopUpDialog from '../components/TopUpDialog';
+import TransactionHistory from '../components/TransactionHistory';
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
   const { profile, activityLevelLabels } = useProfile();
@@ -13,6 +16,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isEditFamilyModalVisible, setIsEditFamilyModalVisible] = useState(false);
   const [editingMemberIndex, setEditingMemberIndex] = useState<number | null>(null);
+  const [isTopUpModalVisible, setIsTopUpModalVisible] = useState(false);
+  const [isTransactionHistoryVisible, setIsTransactionHistoryVisible] = useState(false);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb' }} contentContainerStyle={{ padding: 16 }}>
@@ -27,6 +32,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <WalletCard
+        onTopUpPress={() => setIsTopUpModalVisible(true)}
+        onHistoryPress={() => setIsTransactionHistoryVisible(true)}
+      />
 
       <View style={{ paddingHorizontal: 24, paddingVertical: 24, backgroundColor: '#ffffff', borderRadius: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1, marginBottom: 16 }}>
         <View style={{ marginBottom: 16 }}>
@@ -167,6 +177,20 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
             memberIndex={editingMemberIndex} 
           />
         )}
+      </Modal>
+
+      <TopUpDialog
+        visible={isTopUpModalVisible}
+        onClose={() => setIsTopUpModalVisible(false)}
+      />
+
+      <Modal
+        visible={isTransactionHistoryVisible}
+        onRequestClose={() => setIsTransactionHistoryVisible(false)}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <TransactionHistory onClose={() => setIsTransactionHistoryVisible(false)} />
       </Modal>
     </ScrollView>
   );

@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { TrashIcon } from '../../../components/icons/Icons';
 import { useCart } from '../hooks/useCart';
+import CheckoutDialog from '../components/CheckoutDialog';
 
 const CartScreen: React.FC = () => {
   const { cart, removeFromCart, updateCartItemQuantity, cartTotal, shippingFee, totalWithShipping, clearCart } = useCart();
+  const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
 
   if (cart.length === 0) {
     return (
@@ -107,7 +109,9 @@ const CartScreen: React.FC = () => {
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{totalWithShipping.toLocaleString('vi-VN')}đ</Text>
           </View>
         </View>
-        <TouchableOpacity style={{
+        <TouchableOpacity
+          onPress={() => setIsCheckoutVisible(true)}
+          style={{
           paddingHorizontal: 16,
           paddingVertical: 12,
           backgroundColor: '#10b981',
@@ -117,6 +121,15 @@ const CartScreen: React.FC = () => {
           <Text style={{ color: '#ffffff', fontWeight: '600', fontSize: 16 }}>Tiến hành thanh toán</Text>
         </TouchableOpacity>
       </View>
+
+      <CheckoutDialog
+        visible={isCheckoutVisible}
+        onClose={() => setIsCheckoutVisible(false)}
+        onSuccess={() => {
+          // Could navigate to order confirmation or orders screen
+          setIsCheckoutVisible(false);
+        }}
+      />
     </View>
   );
 };
