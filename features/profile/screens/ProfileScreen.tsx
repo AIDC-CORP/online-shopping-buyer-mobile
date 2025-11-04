@@ -43,6 +43,28 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
           <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Địa điểm</Text>
           <Text style={{ fontSize: 16, color: '#1f2937' }}>{profile.location}</Text>
         </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Chiều cao</Text>
+          <Text style={{ fontSize: 16, color: '#1f2937' }}>{profile.height} cm</Text>
+        </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Cân nặng</Text>
+          <Text style={{ fontSize: 16, color: '#1f2937' }}>{profile.weight} kg</Text>
+        </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Mức độ hoạt động</Text>
+          <Text style={{ fontSize: 16, color: '#1f2937' }}>{activityLevelLabels[profile.activityLevel]}</Text>
+        </View>
+
+        {profile.allergies.length > 0 && (
+          <View style={{ marginBottom: 16 }}>
+            <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Dị ứng</Text>
+            <Text style={{ fontSize: 16, color: '#1f2937' }}>{profile.allergies.join(', ')}</Text>
+          </View>
+        )}
       </View>
 
       <View style={{ marginBottom: 16 }}>
