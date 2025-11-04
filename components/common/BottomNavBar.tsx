@@ -69,12 +69,15 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ activeScreen, setActiveScre
   return (
     <View style={{
       position: 'absolute',
-      bottom: 0,
+      bottom: 0, // Sát mép dưới
       left: 0,
       right: 0,
       backgroundColor: '#ffffff',
       borderTopWidth: 1,
       borderTopColor: '#e5e7eb',
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
+      paddingBottom: 16, // Đệm bên trong cho mềm
       shadowColor: '#000',
       shadowOffset: { width: 0, height: -2 },
       shadowOpacity: 0.05,
