@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Modal, Alert } from 'react-native';
 import { ProfileScreenProps } from '../index';
 import { useProfile } from '../hooks/useProfile';
-import EditProfile from '../dialog/EditProfile';
-import AddProfile from '../dialog/AddProfile';
-import EditFamilyMember from '../dialog/EditFamilyMember';
+import EditProfile from '../components/dialog/EditProfileDialog';
+import AddProfile from '../components/dialog/AddFamilyMemberDialog';
+import EditFamilyMember from '../components/dialog/EditFamilyMemberDialog';
 import WalletCard from '../components/WalletCard';
-import TopUpDialog from '../components/TopUpDialog';
+import TopUpDialog from '../components/dialog/TopUpDialog';
 import TransactionHistory from '../components/TransactionHistory';
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {

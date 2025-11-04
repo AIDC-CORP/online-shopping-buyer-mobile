@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Alert, ActivityIndicator } from 'react-native';
-import { useCart } from '../hooks/useCart';
+import { useCart } from '../../hooks/useCart';
 
 interface CheckoutDialogProps {
   visible: boolean;

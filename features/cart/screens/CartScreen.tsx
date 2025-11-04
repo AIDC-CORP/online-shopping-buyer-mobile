@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { TrashIcon } from '../../../components/icons/Icons';
 import { useCart } from '../hooks/useCart';
-import CheckoutDialog from '../components/CheckoutDialog';
+import CheckoutDialog from '../components/dialog/CheckoutDialog';
 
 const CartScreen: React.FC = () => {
   const { cart, removeFromCart, updateCartItemQuantity, cartTotal, shippingFee, totalWithShipping, clearCart } = useCart();

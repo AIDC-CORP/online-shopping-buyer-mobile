@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { useProfile } from '../hooks/useProfile';
+import { useProfile } from '../../hooks/useProfile';
 
 interface EditProfileProps {
   onClose: () => void;

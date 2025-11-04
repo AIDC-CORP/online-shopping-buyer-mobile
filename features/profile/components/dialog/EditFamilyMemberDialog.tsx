@@ -1,31 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { useProfile } from '../hooks/useProfile';
+import { useProfile } from '../../hooks/useProfile';
 
-interface AddProfileProps {
+interface EditFamilyMemberProps {
   onClose: () => void;
+  memberIndex: number;
 }
 
-const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
-  const { handleAddFamilyMember, isLoading, activityLevels, activityLevelLabels } = useProfile();
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [location, setLocation] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
-  const [activityLevel, setActivityLevel] = useState<'low' | 'medium' | 'high'>('medium');
-  const [allergies, setAllergies] = useState('');
+const EditFamilyMember: React.FC<EditFamilyMemberProps> = ({ onClose, memberIndex }) => {
+  const { profile, handleEditFamilyMember, isLoading, activityLevels, activityLevelLabels } = useProfile();
+  const member = profile.familyMembers[memberIndex];
+
+  const [name, setName] = useState(member.name);
+  const [age, setAge] = useState(String(member.age));
+  const [location, setLocation] = useState(member.location);
+  const [height, setHeight] = useState(String(member.height));
+  const [weight, setWeight] = useState(String(member.weight));
+  const [activityLevel, setActivityLevel] = useState<'low' | 'medium' | 'high'>(member.activityLevel);
+  const [allergies, setAllergies] = useState(member.allergies.join(', '));
 
   const onSave = async () => {
     if (!name || !age || !location || !height || !weight) return;
-    await handleAddFamilyMember({ 
-      name, 
-      age: Number(age), 
-      location, 
-      height: Number(height), 
-      weight: Number(weight), 
-      activityLevel, 
-      allergies: allergies.split(',').map(s => s.trim()).filter(s => s) 
+    await handleEditFamilyMember(memberIndex, {
+      name,
+      age: Number(age),
+      location,
+      height: Number(height),
+      weight: Number(weight),
+      activityLevel,
+      allergies: allergies.split(',').map(s => s.trim()).filter(s => s)
     });
     onClose();
   };
@@ -33,7 +36,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb', padding: 16 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#1f2937' }}>Thêm thành viên gia đình</Text>
+        <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#1f2937' }}>Chỉnh sửa thành viên gia đình</Text>
         <TouchableOpacity onPress={onClose} style={{ padding: 8 }}>
           <Text style={{ fontSize: 16, color: '#6b7280' }}>Đóng</Text>
         </TouchableOpacity>
@@ -143,7 +146,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
           <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 8 }}>Mức độ hoạt động</Text>
           <View style={{ flexDirection: 'row' }}>
             {activityLevels.map((level, idx) => (
-              <TouchableOpacity 
+              <TouchableOpacity
                 key={level}
                 onPress={() => setActivityLevel(level)}
                 style={{
@@ -219,7 +222,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
               justifyContent: 'center',
             }}
           >
-            {isLoading ? <ActivityIndicator color="#ffffff" size="small" /> : <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Thêm</Text>}
+            {isLoading ? <ActivityIndicator color="#ffffff" size="small" /> : <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Lưu</Text>}
           </TouchableOpacity>
         </View>
       </View>
@@ -227,4 +230,4 @@ const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
   );
 };
 
-export default AddProfile;
+export default EditFamilyMember;
