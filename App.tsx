@@ -8,7 +8,7 @@ import LoginScreen from './features/auth/screens/LoginScreen';
 import ShoppingScreen from './features/shopping/screens/ShoppingScreen';
 import OrderHistoryScreen from './features/orders/screens/OrderHistoryScreen';
 import ProfileScreen from './features/profile/screens/ProfileScreen';
-import ChatbotScreen from './features/support/screens/ChatbotScreen';
+import ChatScreen from './features/support/screens/ChatScreen';
 import BottomNavBar from './components/common/BottomNavBar';
 import CartScreen from './features/cart/screens/CartScreen';
 import Header from './components/common/Header';
@@ -72,7 +72,7 @@ const App: React.FC = () => {
       case Screen.Profile:
         return <ProfileScreen onLogout={handleLogout} />;
       case Screen.Chat:
-        return <ChatbotScreen />;
+        return <ChatScreen />;
       case Screen.Cart:
         return <CartScreen />;
       default:

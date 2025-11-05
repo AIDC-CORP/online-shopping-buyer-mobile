@@ -52,44 +52,85 @@ const OrderHistoryScreen: React.FC<OrderHistoryScreenProps> = ({ onSelectOrder }
       </View>
 
       {/* Status Tabs */}
-      <View style={{ backgroundColor: '#f9fafb', borderBottomWidth: 1, borderBottomColor: '#e5e7eb' }}>
+      <View style={{ 
+        backgroundColor: '#ffffff', 
+        borderBottomWidth: 1, 
+        borderBottomColor: '#e5e7eb',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.04,
+        shadowRadius: 2,
+        elevation: 2,
+      }}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 12 }}>
+          contentContainerStyle={{ paddingHorizontal: 8, paddingVertical: 10 }}>
           {STATUS_TABS.map((tab, idx) => {
             const isActive = activeTab === tab.value;
             const count = tab.value === 'all'
               ? orders.length
               : orders.filter(o => o.status === tab.value).length;
+            
+            // Get status color for better visual coding
+            const getTabColor = () => {
+              if (tab.value === 'all') return { bg: '#f3f4f6', text: '#374151', border: '#d1d5db' };
+              const statusInfo = getStatusInfo(tab.value as OrderStatus);
+              return { 
+                bg: isActive ? statusInfo.bg : '#f9fafb',
+                text: isActive ? statusInfo.textClr : '#6b7280',
+                border: isActive ? statusInfo.textClr : '#e5e7eb'
+              };
+            };
+            const tabColor = getTabColor();
+            
             return (
               <TouchableOpacity
                 key={tab.key}
                 onPress={() => setActiveTab(tab.value)}
                 style={{
-                  paddingVertical: 6,
-                  paddingHorizontal: 12,
-                  marginRight: 12,
-                  borderBottomWidth: isActive ? 2 : 0,
-                  borderBottomColor: isActive ? '#ef4444' : 'transparent',
+                  paddingVertical: 8,
+                  paddingHorizontal: 14,
+                  marginHorizontal: 4,
+                  borderRadius: 20,
+                  backgroundColor: tabColor.bg,
+                  borderWidth: isActive ? 2 : 1,
+                  borderColor: tabColor.border,
                   alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: 90,
+                  shadowColor: isActive ? tabColor.text : 'transparent',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: isActive ? 0.1 : 0,
+                  shadowRadius: 2,
+                  elevation: isActive ? 2 : 0,
                 }}>
                 <Text style={{
-                  fontSize: 12,
-                  fontWeight: isActive ? '600' : '500',
-                  color: isActive ? '#ef4444' : '#6b7280',
+                  fontSize: 13,
+                  fontWeight: isActive ? '700' : '500',
+                  color: tabColor.text,
                   textAlign: 'center',
                 }}>
                   {tab.label}
                 </Text>
-                <Text style={{
-                  fontSize: 10,
-                  color: isActive ? '#ef4444' : '#9ca3af',
-                  marginTop: 2,
-                  textAlign: 'center',
+                <View style={{
+                  backgroundColor: tabColor.text,
+                  borderRadius: 10,
+                  paddingHorizontal: 6,
+                  paddingVertical: 2,
+                  marginTop: 4,
+                  minWidth: 24,
+                  alignItems: 'center',
                 }}>
-                  {count}
-                </Text>
+                  <Text style={{
+                    fontSize: 11,
+                    fontWeight: '700',
+                    color: '#ffffff',
+                    textAlign: 'center',
+                  }}>
+                    {count}
+                  </Text>
+                </View>
               </TouchableOpacity>
             );
           })}
