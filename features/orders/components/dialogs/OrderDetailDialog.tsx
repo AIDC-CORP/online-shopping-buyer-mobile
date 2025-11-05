@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, Modal } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, Image, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { Order, OrderStatus, CartItem } from '../../../../types';
 import { useOrderDetail } from '../../hooks/useOrderDetail';
 
@@ -25,6 +25,8 @@ interface OrderDetailDialogProps {
 
 const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ visible, onClose, order }) => {
     const { handleBuyAgain } = useOrderDetail(order);
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
 
     const orderStatus = statusMap[order.status] || statusMap.pending;
 
@@ -86,6 +88,32 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ visible, onClose,
                             <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1f2937' }}>Tổng cộng</Text>
                             <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#059669' }}>{formatCurrency(order.total)}</Text>
                         </View>
+
+                        {order.status === 'completed' && (
+                            <View style={{ marginTop: 16 }}>
+                                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1f2937', marginBottom: 8 }}>Đánh giá đơn hàng</Text>
+                                <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+                                    {[1,2,3,4,5].map(star => (
+                                        <TouchableOpacity key={star} onPress={() => setRating(star)}>
+                                            <Text style={{ fontSize: 24, color: star <= rating ? '#fbbf24' : '#d1d5db' }}>★</Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                                <TextInput
+                                    style={{ borderWidth: 1, borderColor: '#d1d5db', borderRadius: 8, padding: 8, marginBottom: 16 }}
+                                    placeholder="Nhập bình luận của bạn..."
+                                    value={comment}
+                                    onChangeText={setComment}
+                                    multiline
+                                />
+                                <TouchableOpacity
+                                    style={{ paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#10b981', borderRadius: 8, alignItems: 'center' }}
+                                    onPress={() => {/* handle submit */}}
+                                >
+                                    <Text style={{ color: '#ffffff', fontWeight: '600' }}>Gửi đánh giá</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
 
                          <TouchableOpacity
                             onPress={handleBuyAgain}
