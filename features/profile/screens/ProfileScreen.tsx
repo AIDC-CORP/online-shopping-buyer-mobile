@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Modal, Alert } from 'react-native';
 import { ProfileScreenProps } from '../index';
-import { useProfile } from '../hooks/useProfile';
+import { useProfile } from '../hooks/useEditProfile';
 import EditProfile from '../components/dialog/EditProfileDialog';
 import AddProfile from '../components/dialog/AddFamilyMemberDialog';
 import EditFamilyMember from '../components/dialog/EditFamilyMemberDialog';
