@@ -26,18 +26,19 @@ features/
 - **Screen enum**: `Screen.Shopping`, `Screen.Orders`, etc. for navigation state
 - **Conditional rendering**: Screens render based on `activeScreen` state and `selectedOrder`
 - **Order detail flow**: Special handling for order detail screens that overlay other screens
+- **Bottom navigation**: `BottomNavBar` component manages tab switching
 
 ### Styling
 - **NativeWind 4**: Tailwind CSS classes directly in `className` props
-- **No styled HOCs**: Use `className` directly on React Native components (removed in NativeWind 4 migration)
+- **Migration note**: Removed styled HOCs - use `className` directly (NativeWind 4 migration)
+- **CSS processing**: `withNativeWind(config, { input: './global.css' })` for Metro bundler
 - **Example**: `<View className="flex-1 bg-slate-100">`
-- **Metro config**: `withNativeWind(config, { input: './global.css' })` for CSS processing
 
 ### AI Integration
 - **Gemini API**: Used for meal planning (`generateMealPlan`) and chatbot (`getChatbotResponse`)
 - **Environment**: `EXPO_PUBLIC_GEMINI_API_KEY` required (must be prefixed with `EXPO_PUBLIC_`)
-- **Error handling**: Graceful fallbacks with user-friendly Vietnamese messages
 - **Mock mode**: Services use mock data with simulated delays (`apiDelay` function) for development
+- **Current state**: AI services return mock responses for UI development
 - **Meal planning**: AI generates meal suggestions based on user profile (age, weight, allergies, etc.)
 
 ### Data Layer
@@ -45,6 +46,12 @@ features/
 - **No backend**: Pure frontend with simulated API delays (500-1000ms) for realistic UX
 - **Types**: Strongly typed with TypeScript interfaces in `types.ts`
 - **Family profiles**: Support for multiple family members with individual dietary preferences
+
+### Wallet System
+- **Balance tracking**: User wallet balance stored in context and persisted via mock API
+- **Transactions**: Full transaction history with types: 'top_up', 'payment', 'refund'
+- **Payment integration**: `deductFromWallet()` method handles order payments with balance validation
+- **Top-up**: `addToWallet()` method for adding funds with transaction logging
 
 ## Development Workflow
 
@@ -57,14 +64,15 @@ yarn start
 ```
 
 ### Testing
-- **Expo Go**: Scan QR code for physical device testing
-- **Emulators**: `yarn ios` / `yarn android`
-- **Web**: `yarn web` (experimental, limited functionality)
+- **Jest setup**: Configured in `jest.config.json` with React Native preset
+- **Mock styles**: CSS files mocked via `__mocks__/styleMock.js`
+- **Test command**: `yarn test` runs Jest test suite
+- **Current tests**: Basic App component test in `App.test.tsx`
 
 ### Common Commands
 - `npx expo start -c`: Clear Metro cache when bundling fails
 - `rm -rf node_modules && yarn install`: Clean reinstall for dependency issues
-- `./start.sh`: Automated setup and start script (if available)
+- `./start.sh`: Automated setup and start script (may show asset warnings)
 
 ## Code Patterns & Conventions
 
@@ -105,6 +113,8 @@ const fetchData = useCallback(async () => {
 ```tsx
 const { addToCart, removeFromCart, updateCartItemQuantity, cartTotal } = useAppContext();
 // Use these methods for cart management - they handle quantity updates automatically
+addToCart(product, quantity); // Adds or increments existing items
+updateCartItemQuantity(productId, 0); // Removes item from cart
 ```
 
 ### Feature Organization
@@ -119,6 +129,16 @@ const { addToCart, removeFromCart, updateCartItemQuantity, cartTotal } = useAppC
 - **Product data**: Mock products have Vietnamese names (e.g., "Thịt bò Úc", "Rau cải bó xôi")
 - **Code comments**: Mix of English and Vietnamese comments
 
+### Screen Navigation
+```tsx
+// In App.tsx - custom navigation system
+const [activeScreen, setActiveScreen] = useState<Screen>(Screen.Shopping);
+const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
+// Navigation triggered by BottomNavBar onPress handlers
+// Order details overlay other screens when selectedOrder is set
+```
+
 ## Key Files Reference
 
 - `App.tsx`: Main navigation and screen routing with custom Screen enum
@@ -130,6 +150,7 @@ const { addToCart, removeFromCart, updateCartItemQuantity, cartTotal } = useAppC
 - `features/cart/screens/CartScreen.tsx`: Cart management with checkout functionality
 - `tailwind.config.js`: NativeWind configuration with content paths
 - `metro.config.js`: Metro bundler config with NativeWind integration
+- `jest.config.json`: Jest testing configuration with style mocks
 
 ## Dependencies & Environment
 - **Expo SDK 54**: Latest Expo with React Native 0.81.5
@@ -146,9 +167,11 @@ const { addToCart, removeFromCart, updateCartItemQuantity, cartTotal } = useAppC
 - **Hook dependencies**: Always include all dependencies in `useCallback` deps arrays
 - **Vietnamese text**: Ensure all user-facing strings are in Vietnamese
 - **Mock delays**: AI services simulate 500-800ms delays for realistic UX testing
+- **Asset warnings**: `start.sh` may show favicon errors - these are non-critical for development
 
 ## Build Configuration
 - **Metro config**: Uses `withNativeWind` for CSS processing with `global.css` input
 - **Tailwind content**: Includes `App.tsx`, `components/`, and `features/` paths
 - **Asset handling**: Expo handles assets automatically via `assetBundlePatterns`
 - **TypeScript**: Strict typing with interfaces in `types.ts`
+- **Jest**: Configured for React Native testing with CSS mocking
