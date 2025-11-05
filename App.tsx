@@ -76,14 +76,14 @@ const App: React.FC = () => {
 
   return (
     <AppContextProvider user={user}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#f1f5f9' }}>
-        <StatusBar barStyle="light-content" backgroundColor="#10b981" />
+      <View style={{ flex: 1, backgroundColor: '#f9fafb' }}>
+        <StatusBar barStyle="light-content" backgroundColor="#10b981" translucent={true} />
         <Header />
-        <View style={{ flex: 1, paddingTop: 96, paddingBottom: 64 }}>
+        <View style={{ flex: 1, overflow: 'hidden' }}>
            {renderScreen()}
         </View>
         <BottomNavBar activeScreen={activeScreen} setActiveScreen={setActiveScreen} />
-      </SafeAreaView>
+      </View>
     </AppContextProvider>
   );
 };

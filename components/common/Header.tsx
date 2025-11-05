@@ -11,11 +11,6 @@ const Header: React.FC = () => {
 
     return (
         <View style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 40,
             backgroundColor: '#10b981',
             paddingTop: 48,
             paddingBottom: 16,
