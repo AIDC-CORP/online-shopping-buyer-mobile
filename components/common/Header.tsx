@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useAppContext } from '../../context/AppContext';
-import { ShoppingCartIcon } from '../icons/Icons';
+import { BellIcon } from '../icons/Icons';
 
 
 interface HeaderProps {
@@ -11,9 +11,10 @@ interface HeaderProps {
     isHasBackButton?: boolean;
     onPressBack?: () => void;
     rightView?: React.ReactNode;
+    onPressBell?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ title = 'Xin chào', isShowUser = true, isHasBackButton, onPressBack, rightView }) => {
+const Header: React.FC<HeaderProps> = ({ title = 'Xin chào', isShowUser = true, isHasBackButton, onPressBack, rightView, onPressBell }) => {
     const { user } = useAppContext();
 
     if (!user) return null;
@@ -39,6 +40,9 @@ const Header: React.FC<HeaderProps> = ({ title = 'Xin chào', isShowUser = true,
                     </View>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <TouchableOpacity onPress={onPressBell || (() => console.log('Bell icon pressed'))} style={{ marginRight: 16 }}>
+                        <BellIcon color="white" />
+                    </TouchableOpacity>
                     {rightView}
                 </View>
             </View>

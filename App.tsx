@@ -13,6 +13,7 @@ import BottomNavBar from './components/common/BottomNavBar';
 import CartScreen from './features/cart/screens/CartScreen';
 import Header from './components/common/Header';
 import OrderDetailDialog from './features/orders/components/dialogs/OrderDetailDialog';
+import { NotificationsDialog } from './features/notifications';
 import { User, Order } from './types';
 import { MOCK_USER } from './services/api/mockApiService';
 
@@ -31,6 +32,7 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [activeScreen, setActiveScreen] = useState<Screen>(Screen.Shopping);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleLogin = useCallback(() => {
     setUser(MOCK_USER);
@@ -47,6 +49,14 @@ const App: React.FC = () => {
 
   const handleBackFromDetail = useCallback(() => {
     setSelectedOrder(null);
+  }, []);
+
+  const handleShowNotifications = useCallback(() => {
+    setShowNotifications(true);
+  }, []);
+
+  const handleCloseNotifications = useCallback(() => {
+    setShowNotifications(false);
   }, []);
 
   const renderScreen = () => {
@@ -78,11 +88,12 @@ const App: React.FC = () => {
     <AppContextProvider user={user}>
       <View style={{ flex: 1, backgroundColor: '#f9fafb' }}>
         <StatusBar barStyle="light-content" backgroundColor="#10b981" translucent={true} />
-        <Header />
+        <Header onPressBell={handleShowNotifications} />
         <View style={{ flex: 1, overflow: 'hidden' }}>
            {renderScreen()}
         </View>
         <BottomNavBar activeScreen={activeScreen} setActiveScreen={setActiveScreen} />
+        <NotificationsDialog visible={showNotifications} onClose={handleCloseNotifications} />
       </View>
     </AppContextProvider>
   );

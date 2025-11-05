@@ -62,3 +62,16 @@ export interface WalletTransaction {
   date: string;
   orderId?: string; // for payment transactions
 }
+
+export type NotificationType = 'order_update' | 'promotion' | 'system' | 'reminder';
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  date: string;
+  isRead: boolean;
+  orderId?: string; // for order-related notifications
+  actionUrl?: string; // optional action URL
+}

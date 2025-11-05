@@ -70,7 +70,7 @@ yarn start
 - **Current tests**: Basic App component test in `App.test.tsx`
 
 ### Common Commands
-- `npx expo start -c`: Clear Metro cache when bundling fails
+- `yarn start --clear`: Clear Metro cache when bundling fails
 - `rm -rf node_modules && yarn install`: Clean reinstall for dependency issues
 - `./start.sh`: Automated setup and start script (may show asset warnings)
 
