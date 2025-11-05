@@ -6,7 +6,7 @@
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
   "moduleNameMapper": {
-    "\\.(css|scss|sass|less)$": "<rootDir>/__mocks__/styleMock.js"
+    "\\.(css|scss|sass|less)$": "<rootDir>/__mocks__/styleMock.ts"
   },
   "setupFilesAfterEnv": [],
   "testPathIgnorePatterns": ["/node_modules/", "/dist/", "/build/"],
