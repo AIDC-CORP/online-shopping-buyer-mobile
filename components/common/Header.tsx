@@ -1,10 +1,19 @@
 
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useAppContext } from '../../context/AppContext';
-import { UserCircleIcon } from '../icons/Icons';
+import { ShoppingCartIcon } from '../icons/Icons';
 
-const Header: React.FC = () => {
+
+interface HeaderProps {
+    title?: string;
+    isShowUser?: boolean;
+    isHasBackButton?: boolean;
+    onPressBack?: () => void;
+    rightView?: React.ReactNode;
+}
+
+const Header: React.FC<HeaderProps> = ({ title = 'Xin chào', isShowUser = true, isHasBackButton, onPressBack, rightView }) => {
     const { user } = useAppContext();
 
     if (!user) return null;
@@ -15,18 +24,23 @@ const Header: React.FC = () => {
             paddingTop: 48,
             paddingBottom: 16,
             paddingHorizontal: 16,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 3,
+            borderBottomLeftRadius: 40,
         }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <View>
-                    <Text style={{ fontSize: 12, color: '#ffffff' }}>Xin chào,</Text>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#ffffff' }}>{user.name}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {/* {isHasBackButton && (
+                        <TouchableOpacity onPress={onPressBack} style={{ marginRight: 16 }}>
+                            <ArrowLeftIcon color="white" />
+                        </TouchableOpacity>
+                    )} */}
+                    <View>
+                        <Text style={{ fontSize: 12, color: '#ffffff' }}>{title}</Text>
+                        {isShowUser && <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#ffffff' }}>{user.name}</Text>}
+                    </View>
                 </View>
-                <UserCircleIcon color="white" />
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    {rightView}
+                </View>
             </View>
         </View>
     );
