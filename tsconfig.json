@@ -14,7 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["expo/types"]
+  "types": ["expo/types", "jest"]
   },
   "exclude": [
     "node_modules",
