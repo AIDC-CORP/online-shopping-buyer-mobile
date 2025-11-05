@@ -7,7 +7,7 @@ interface EditProfileProps {
 }
 
 const EditProfile: React.FC<EditProfileProps> = ({ onClose }) => {
-  const { profile, isLoading, handleInputChange, handleSave } = useProfile();
+  const { profile, isLoading, handleInputChange, handleSave, activityLevels, activityLevelLabels } = useProfile();
 
   const onSave = async () => {
     await handleSave();
@@ -66,6 +66,100 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose }) => {
           <TextInput
             value={profile.location}
             onChangeText={(text) => handleInputChange('location', text)}
+            style={{
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              fontSize: 16,
+              borderWidth: 1,
+              borderColor: '#d1d5db',
+              borderRadius: 6,
+              backgroundColor: '#ffffff',
+              color: '#1f2937',
+            }}
+          />
+        </View>
+
+        <View style={{ flexDirection: 'row', gap: 16, marginBottom: 16 }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Chiều cao (cm)</Text>
+            <TextInput
+              keyboardType="numeric"
+              value={String(profile.height)}
+              onChangeText={(text) => handleInputChange('height', Number(text))}
+              placeholder="Nhập chiều cao"
+              style={{
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                fontSize: 16,
+                borderWidth: 1,
+                borderColor: '#d1d5db',
+                borderRadius: 6,
+                backgroundColor: '#ffffff',
+                color: '#1f2937',
+              }}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Cân nặng (kg)</Text>
+            <TextInput
+              keyboardType="numeric"
+              value={String(profile.weight)}
+              onChangeText={(text) => handleInputChange('weight', Number(text))}
+              placeholder="Nhập cân nặng"
+              style={{
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                fontSize: 16,
+                borderWidth: 1,
+                borderColor: '#d1d5db',
+                borderRadius: 6,
+                backgroundColor: '#ffffff',
+                color: '#1f2937',
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 8 }}>Mức độ hoạt động</Text>
+          <View style={{ flexDirection: 'row' }}>
+            {activityLevels.map((level, idx) => (
+              <TouchableOpacity
+                key={level}
+                onPress={() => handleInputChange('activityLevel', level)}
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  paddingVertical: 8,
+                  borderTopWidth: 1,
+                  borderBottomWidth: 1,
+                  borderRightWidth: 1,
+                  borderLeftWidth: idx === 0 ? 1 : 0,
+                  borderTopLeftRadius: idx === 0 ? 6 : 0,
+                  borderBottomLeftRadius: idx === 0 ? 6 : 0,
+                  borderTopRightRadius: idx === activityLevels.length - 1 ? 6 : 0,
+                  borderBottomRightRadius: idx === activityLevels.length - 1 ? 6 : 0,
+                  borderColor: profile.activityLevel === level ? '#10b981' : '#d1d5db',
+                  backgroundColor: profile.activityLevel === level ? '#10b981' : '#ffffff',
+                }}
+              >
+                <Text style={{
+                  color: profile.activityLevel === level ? '#ffffff' : '#374151',
+                  fontWeight: profile.activityLevel === level ? '600' : '400',
+                }}>
+                  {activityLevelLabels[level]}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Dị ứng (cách nhau bởi dấu phẩy)</Text>
+          <TextInput
+            value={profile.allergies.join(', ')}
+            onChangeText={(text) => handleInputChange('allergies', text.split(',').map(s => s.trim()))}
+            placeholder="Nhập dị ứng, ví dụ: Đậu phộng, Sữa"
             style={{
               paddingHorizontal: 12,
               paddingVertical: 8,
