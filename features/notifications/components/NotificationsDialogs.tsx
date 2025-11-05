@@ -2,11 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Modal, ScrollView, ActivityIndicator } from 'react-native';
 import { Notification } from '../../../types';
 import { useNotifications } from '../hooks/useNotifications';
-
-interface NotificationsDialogProps {
-  visible: boolean;
-  onClose: () => void;
-}
+import { NotificationsDialogProps } from '../index';
 
 const NotificationsDialog: React.FC<NotificationsDialogProps> = ({ visible, onClose }) => {
   const { notifications, loading, handleMarkAsRead } = useNotifications(visible);

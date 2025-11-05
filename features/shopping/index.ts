@@ -17,3 +17,4 @@ export interface Meal {
   dish: string;
   ingredients: string[];
 }
+

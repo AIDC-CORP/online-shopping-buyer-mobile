@@ -1,10 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { useProfile } from '../../hooks/useEditProfile';
-
-interface EditProfileProps {
-  onClose: () => void;
-}
+import { EditProfileProps } from '../../index';
 
 const EditProfile: React.FC<EditProfileProps> = ({ onClose }) => {
   const { profile, isLoading, handleInputChange, handleSave, activityLevels, activityLevelLabels } = useProfile();
