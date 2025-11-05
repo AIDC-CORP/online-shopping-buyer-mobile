@@ -12,7 +12,7 @@ import ChatbotScreen from './features/support/screens/ChatbotScreen';
 import BottomNavBar from './components/common/BottomNavBar';
 import CartScreen from './features/cart/screens/CartScreen';
 import Header from './components/common/Header';
-import OrderDetailScreen from './features/orders/screens/OrderDetailScreen';
+import OrderDetailDialog from './features/orders/components/dialogs/OrderDetailDialog';
 import { User, Order } from './types';
 import { MOCK_USER } from './services/api/mockApiService';
 
@@ -51,7 +51,7 @@ const App: React.FC = () => {
 
   const renderScreen = () => {
     if (selectedOrder) {
-      return <OrderDetailScreen order={selectedOrder} onBack={handleBackFromDetail} />;
+      return <OrderDetailDialog visible={!!selectedOrder} order={selectedOrder} onClose={handleBackFromDetail} />;
     }
 
     switch (activeScreen) {
