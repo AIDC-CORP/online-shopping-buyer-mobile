@@ -139,7 +139,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                   maxLength={6}
                   value={otp}
                   onChangeText={(value) => {
-                    setOtp(value);
+                    // Ensure only 6 digits are accepted
+                    const numericValue = value.replace(/[^0-9]/g, '').slice(0, 6);
+                    setOtp(numericValue);
                     setError('');
                   }}
                   placeholder="______"

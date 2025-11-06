@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 export const useLogin = (onLogin: () => void) => {
   const [step, setStep] = useState(1);
@@ -7,21 +7,29 @@ export const useLogin = (onLogin: () => void) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const phoneRef = useRef(phone);
+  const otpRef = useRef(otp);
+  phoneRef.current = phone;
+  otpRef.current = otp;
+
   const handlePhoneSubmit = useCallback(() => {
-    if (phone.length < 9) {
+    const currentPhone = phoneRef.current;
+    if (currentPhone.length < 9) {
       setError('Vui lòng nhập số điện thoại hợp lệ.');
       return;
     }
     setError('');
+    // Set loading synchronously
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
       setStep(2);
     }, 1000);
-  }, [phone]);
+  }, []);
 
   const handleOtpSubmit = useCallback(() => {
-    if (otp !== '123456') {
+    const currentOtp = otpRef.current;
+    if (currentOtp !== '123456') {
       setError('Mã OTP không hợp lệ. Vui lòng thử lại.');
       return;
     }
@@ -31,7 +39,7 @@ export const useLogin = (onLogin: () => void) => {
       setIsLoading(false);
       onLogin();
     }, 1000);
-  }, [otp, onLogin]);
+  }, [onLogin]);
 
   return {
     step,

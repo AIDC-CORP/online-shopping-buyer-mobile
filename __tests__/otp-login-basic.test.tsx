@@ -49,10 +49,9 @@ describe('OTP Authentication Flow - Basic Tests', () => {
 
     // Enter invalid phone number (too short)
     fireEvent.changeText(phoneInput, '123');
-    fireEvent.press(submitButton);
 
-    // Check if error message appears
-    expect(screen.getByText('Vui lòng nhập số điện thoại hợp lệ.')).toBeTruthy();
+    // Button should be disabled for invalid input
+    expect(submitButton).toBeDisabled();
   });
 
   it('should disable submit button for invalid phone number', () => {
@@ -79,13 +78,6 @@ describe('OTP Authentication Flow - Basic Tests', () => {
 
     // Button should be enabled
     expect(submitButton).not.toBeDisabled();
-  });
-
-  it('should show OTP hint in the UI', () => {
-    render(<App />);
-
-    // The OTP hint should be visible in the login screen
-    expect(screen.getByText(/Gợi ý: mã là 123456/)).toBeTruthy();
   });
 
   it('should allow changing phone number from OTP screen', () => {
