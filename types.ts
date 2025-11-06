@@ -52,6 +52,14 @@ export interface ChatMessage {
     sender: 'user' | 'bot';
 }
 
+export interface ChatConversation {
+    id: string;
+    title: string;
+    messages: ChatMessage[];
+    createdAt: string;
+    updatedAt: string;
+}
+
 export type WalletTransactionType = 'top_up' | 'payment' | 'refund';
 
 export interface WalletTransaction {
@@ -74,4 +82,12 @@ export interface Notification {
   isRead: boolean;
   orderId?: string; // for order-related notifications
   actionUrl?: string; // optional action URL
+}
+
+export enum Screen {
+  Shopping,
+  Orders,
+  Profile,
+  Chat,
+  Cart,
 }

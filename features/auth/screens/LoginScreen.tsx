@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, Platform, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ActivityIndicator, ScrollView } from 'react-native';
 import { SparklesIcon } from '../../../components/icons/Icons';
 import { LoginScreenProps } from '../index';
 import { useLogin } from '../hooks/useLogin';
@@ -21,7 +21,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   } = useLogin(onLogin);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#f0f9ff' }}>
+    <View style={{ flex: 1, backgroundColor: '#f0f9ff' }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
@@ -204,7 +204,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 

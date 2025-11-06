@@ -49,7 +49,7 @@ export const ShoppingCartIcon: React.FC<IconProps> = ({ color = 'currentColor', 
 // FIX: Replaced defaultProps with default parameters in function signature.
 export const TrashIcon: React.FC<IconProps> = ({ color = 'currentColor', size = 20 }) => (
     <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke={color} height={size} width={size}>
-        <Path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.144-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.057-2.09.99-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+        <Path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
     </Svg>
 );
 
@@ -69,8 +69,22 @@ export const ChevronLeftIcon: React.FC<IconProps> = ({ color = 'currentColor', s
 );
 
 // FIX: Replaced defaultProps with default parameters in function signature.
+export const MenuIcon: React.FC<IconProps> = ({ color = 'currentColor', size = 24 }) => (
+  <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke={color} height={size} width={size}>
+    <Path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+  </Svg>
+);
+
+// FIX: Replaced defaultProps with default parameters in function signature.
+export const PlusIcon: React.FC<IconProps> = ({ color = 'currentColor', size = 24 }) => (
+  <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke={color} height={size} width={size}>
+    <Path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+  </Svg>
+);
+
+// FIX: Replaced defaultProps with default parameters in function signature.
 export const BellIcon: React.FC<IconProps> = ({ color = 'currentColor', size = 24 }) => (
-    <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke={color} height={size} width={size}>
-        <Path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-    </Svg>
+  <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke={color} height={size} width={size}>
+    <Path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+  </Svg>
 );

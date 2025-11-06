@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Screen } from '../../App';
+import { Screen } from '../../types';
 import { HomeIcon, ListBulletIcon, UserCircleIcon, ChatBubbleLeftRightIcon, ShoppingCartIcon } from '../icons/Icons';
 import { useAppContext } from '../../context/AppContext';
 
