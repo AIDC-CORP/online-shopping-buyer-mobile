@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Alert, Image } from 'react-native';
 import { ProfileScreenProps } from '../index';
 import { useProfile } from '../hooks/useEditProfile';
 import EditProfile from '../components/dialog/EditProfileDialog';
@@ -19,9 +19,30 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
   const [isTopUpModalVisible, setIsTopUpModalVisible] = useState(false);
   const [isTransactionHistoryVisible, setIsTransactionHistoryVisible] = useState(false);
 
+  // Avatar and cover image states (using placeholder URLs for now)
+  const [avatarUri] = useState('https://via.placeholder.com/100x100/4F46E5/FFFFFF?text=A');
+  const [coverUri] = useState('https://via.placeholder.com/400x200/10B981/FFFFFF?text=Cover');
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb' }} contentContainerStyle={{ padding: 16 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      {/* Cover Image Section */}
+      <View style={{ position: 'relative', marginBottom: 24 }}>
+        <Image
+          source={{ uri: coverUri }}
+          style={{ width: '100%', height: 200, borderRadius: 8 }}
+          resizeMode="cover"
+        />
+        {/* Avatar positioned over cover */}
+        <View style={{ position: 'absolute', bottom: -40, left: 16 }}>
+          <Image
+            source={{ uri: avatarUri }}
+            style={{ width: 80, height: 80, borderRadius: 40, borderWidth: 4, borderColor: '#ffffff' }}
+            resizeMode="cover"
+          />
+        </View>
+      </View>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, marginTop: 48 }}>
         <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#1f2937' }}>Hồ sơ của bạn</Text>
         <TouchableOpacity
           onPress={() => setIsEditModalVisible(true)}
