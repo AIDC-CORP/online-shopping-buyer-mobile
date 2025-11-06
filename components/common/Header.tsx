@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 import { useAppContext } from '../../context/AppContext';
 import { BellIcon } from '../icons/Icons';
 
@@ -20,31 +21,33 @@ const Header: React.FC<HeaderProps> = ({ title = 'Xin chào', isShowUser = true,
     if (!user) return null;
 
     return (
-        <View style={{
-            backgroundColor: '#10b981',
-            paddingTop: 48,
-            paddingBottom: 16,
-            paddingHorizontal: 16,
-            borderBottomLeftRadius: 40,
-        }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {/* {isHasBackButton && (
-                        <TouchableOpacity onPress={onPressBack} style={{ marginRight: 16 }}>
-                            <ArrowLeftIcon color="white" />
+        <View style={{ position: 'relative' }}>
+            {/* Main header background */}
+            <View style={{ backgroundColor: '#10b981', paddingTop: 42, paddingBottom: 1, paddingHorizontal: 16 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View>
+                            <Text style={{ fontSize: 12, color: '#ffffff', opacity: 0.9 }}>{title}</Text>
+                            {isShowUser && <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#ffffff', marginTop: 2 }}>{user.name}</Text>}
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={onPressBell || (() => console.log('Bell icon pressed'))} style={{ marginRight: 16 }}>
+                            <BellIcon color="white" />
                         </TouchableOpacity>
-                    )} */}
-                    <View>
-                        <Text style={{ fontSize: 12, color: '#ffffff' }}>{title}</Text>
-                        {isShowUser && <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#ffffff' }}>{user.name}</Text>}
+                        {rightView}
                     </View>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <TouchableOpacity onPress={onPressBell || (() => console.log('Bell icon pressed'))} style={{ marginRight: 16 }}>
-                        <BellIcon color="white" />
-                    </TouchableOpacity>
-                    {rightView}
-                </View>
+            </View>
+            
+            {/* Wavy bottom border using SVG */}
+            <View style={{ height: 40, overflow: 'hidden', backgroundColor: 'transparent' }}>
+                <Svg height="40" width="100%" viewBox="0 0 1440 80" preserveAspectRatio="none">
+                    <Path
+                        d="M0,40 C240,65 480,65 720,40 C960,15 1200,15 1440,40 L1440,0 L0,0 Z"
+                        fill="#10b981"
+                    />
+                </Svg>
             </View>
         </View>
     );
