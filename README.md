@@ -31,7 +31,7 @@ yarn start
 This will start the Expo development server. You'll see a QR code in your terminal.
 
 
-```
+
 
 **Using Expo Go:**
 - Install Expo Go from App Store (iOS) or Play Store (Android)
@@ -56,38 +56,46 @@ This will start the Expo development server. You'll see a QR code in your termin
 
 ## 📂 Project Structure
 
+**Core Files:**
+- `App.tsx` - Main app component with custom navigation
+- `App.test.tsx` - Jest tests for App component
+- `index.tsx` - Entry point
+- `types.ts` - TypeScript type definitions
+- `global.css` - Global CSS styles for NativeWind
+
+**Directories:**
+
 ```
-├── App.tsx                 # Main app component with custom navigation
-├── App.test.tsx           # Jest tests for App component
-├── index.tsx              # Entry point
-├── types.ts               # TypeScript type definitions
-├── global.css             # Global CSS styles for NativeWind
-├── __mocks__/             # Jest mocks
-│   └── styleMock.ts      # CSS mock for testing
-├── __tests__/             # Test files
+├── __mocks__/
+│   └── styleMock.ts                    # CSS mock for testing
+│
+├── __tests__/
 │   ├── auth-flow.test.tsx
 │   ├── otp-login-basic.test.tsx
 │   └── useLogin.test.ts
-├── assets/                # Static assets and images
+│
+├── assets/                             # Static assets and images
 │   └── README.md
-├── components/            # Reusable UI components
-│   ├── common/           # Shared components
+│
+├── components/
+│   ├── common/                         # Shared UI components
 │   │   ├── BottomNavBar.tsx
 │   │   ├── Header.tsx
 │   │   └── Spinner.tsx
-│   └── icons/            # Icon components
+│   └── icons/
 │       └── Icons.tsx
-├── context/               # React context for global state
-│   └── AppContext.tsx    # Global state (user, cart, wallet)
-├── features/              # Feature-specific modules
-│   ├── auth/             # Authentication
+│
+├── context/
+│   └── AppContext.tsx                  # Global state (user, cart, wallet)
+│
+├── features/                           # Feature-specific modules
+│   ├── auth/
 │   │   ├── index.ts
 │   │   ├── components/
-│   │   ├── hooks/
-│   │   │   └── useLogin.ts
-│   │   └── screens/
-│   │       └── LoginScreen.tsx
-│   ├── shopping/         # Shopping and AI meal planning
+│   │   ├── hooks/useLogin.ts
+│   │   └── screens/LoginScreen.tsx
+│   │
+│   ├── shopping/
 │   │   ├── index.ts
 │   │   ├── components/
 │   │   │   ├── AiMenuSuggestion.tsx
@@ -96,28 +104,23 @@ This will start the Expo development server. You'll see a QR code in your termin
 │   │   ├── hooks/
 │   │   │   ├── useAiMenuSuggestion.ts
 │   │   │   └── useShopping.ts
-│   │   └── screens/
-│   │       └── ShoppingScreen.tsx
-│   ├── cart/             # Cart management
+│   │   └── screens/ShoppingScreen.tsx
+│   │
+│   ├── cart/
 │   │   ├── index.ts
-│   │   ├── components/
-│   │   │   └── dialog/
-│   │   │       └── CheckoutDialog.tsx
-│   │   ├── hooks/
-│   │   │   └── useCart.ts
-│   │   └── screens/
-│   │       └── CartScreen.tsx
-│   ├── orders/           # Order history and details
+│   │   ├── components/dialog/CheckoutDialog.tsx
+│   │   ├── hooks/useCart.ts
+│   │   └── screens/CartScreen.tsx
+│   │
+│   ├── orders/
 │   │   ├── index.ts
-│   │   ├── components/
-│   │   │   └── dialogs/
-│   │   │       └── OrderDetailDialog.tsx
+│   │   ├── components/dialogs/OrderDetailDialog.tsx
 │   │   ├── hooks/
 │   │   │   ├── useOrderDetail.ts
 │   │   │   └── useOrderHistory.ts
-│   │   └── screens/
-│   │       └── OrderHistoryScreen.tsx
-│   ├── profile/          # User profile and wallet
+│   │   └── screens/OrderHistoryScreen.tsx
+│   │
+│   ├── profile/
 │   │   ├── index.ts
 │   │   ├── components/
 │   │   │   ├── TransactionHistory.tsx
@@ -131,39 +134,39 @@ This will start the Expo development server. You'll see a QR code in your termin
 │   │   │   ├── useAddFamilyMember.ts
 │   │   │   ├── useEditFamilyMember.ts
 │   │   │   └── useEditProfile.ts
-│   │   └── screens/
-│   │       └── ProfileScreen.tsx
-│   ├── notifications/    # Notifications
+│   │   └── screens/ProfileScreen.tsx
+│   │
+│   ├── notifications/
 │   │   ├── index.ts
-│   │   ├── components/
-│   │   │   └── NotificationsDialogs.tsx
-│   │   ├── hooks/
-│   │   │   └── useNotifications.ts
+│   │   ├── components/NotificationsDialogs.tsx
+│   │   ├── hooks/useNotifications.ts
 │   │   └── screens/
-│   ├── support/          # AI chatbot support
-│   │   ├── index.ts
-│   │   ├── components/
-│   │   │   ├── ChatAI.tsx
-│   │   │   └── ChatSeller.tsx
-│   │   ├── hooks/
-│   │   │   ├── useChatbot.ts
-│   │   │   └── useSellerChat.ts
-│   │   └── screens/
-│   │       └── ChatScreen.tsx
-├── services/              # API services and integrations
-│   ├── geminiService.ts  # AI integration (currently mocked)
-│   └── api/              # Mock API services
-│       └── mockApiService.ts
-├── app.json              # Expo app configuration
-├── babel.config.js       # Babel configuration
-├── eas.json             # Expo Application Services config
-├── jest.config.json     # Jest testing configuration
-├── metro.config.js      # Metro bundler config with NativeWind
-├── nativewind-env.d.ts  # NativeWind TypeScript declarations
-├── package.json         # Dependencies and scripts
-├── start.sh             # Automated setup script
-├── tailwind.config.js   # Tailwind CSS configuration
-└── tsconfig.json        # TypeScript configuration
+│   │
+│   └── support/
+│       ├── index.ts
+│       ├── components/
+│       │   ├── ChatAI.tsx
+│       │   └── ChatSeller.tsx
+│       ├── hooks/
+│       │   ├── useChatbot.ts
+│       │   └── useSellerChat.ts
+│       └── screens/ChatScreen.tsx
+│
+├── services/
+│   ├── geminiService.ts                # AI integration (currently mocked)
+│   └── api/mockApiService.ts           # Mock API services
+│
+└── Configuration Files
+    ├── app.json                        # Expo app configuration
+    ├── babel.config.js                 # Babel configuration
+    ├── eas.json                        # Expo Application Services config
+    ├── jest.config.json                # Jest testing configuration
+    ├── metro.config.js                 # Metro bundler config with NativeWind
+    ├── nativewind-env.d.ts             # NativeWind TypeScript declarations
+    ├── package.json                    # Dependencies and scripts
+    ├── start.sh                        # Automated setup script
+    ├── tailwind.config.js              # Tailwind CSS configuration
+    └── tsconfig.json                   # TypeScript configuration
 ```
 
 ## 🔧 Configuration Files
