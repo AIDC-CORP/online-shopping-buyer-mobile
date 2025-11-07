@@ -214,7 +214,7 @@ yarn add -D @types/react @types/react-native
 ```bash
 rm -rf node_modules .expo .metro-cache
 yarn install
-npx expo start -c
+yarn start -c
 ```
 
 ## 📝 Development Notes
