@@ -65,7 +65,7 @@ const ChatbotScreen: React.FC = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "padding"}
       style={{ flex: 1 }}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 155 : 175}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 175 : 175}
     >
       <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ffffff' }}>
         {/* Sidebar */}
