@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screen } from '../../types';
 import { HomeIcon, ListBulletIcon, UserCircleIcon, ChatBubbleLeftRightIcon, ShoppingCartIcon } from '../icons/Icons';
 import { useAppContext } from '../../context/AppContext';
@@ -83,6 +84,7 @@ const NavItem: React.FC<{
 
 const BottomNavBar: React.FC<BottomNavBarProps> = ({ activeScreen, setActiveScreen }) => {
   const { cart } = useAppContext();
+  const insets = useSafeAreaInsets();
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
   const navItems = [
@@ -100,7 +102,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ activeScreen, setActiveScre
       borderTopColor: '#e5e7eb',
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
-      paddingBottom: 20,
+      paddingBottom: 20 + insets.bottom,
       paddingTop: 8,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: -4 },

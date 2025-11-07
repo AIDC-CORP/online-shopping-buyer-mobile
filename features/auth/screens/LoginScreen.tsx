@@ -21,12 +21,16 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   } = useLogin(onLogin);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#f0f9ff' }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+      style={{ flex: 1, backgroundColor: '#f0f9ff' }}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 40}
+    >
+      <ScrollView 
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24 }}
+        keyboardShouldPersistTaps="handled"
+        scrollEnabled={false}
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24 }}>
           <View style={{
             borderRadius: 24,
             backgroundColor: '#ffffff',
@@ -206,7 +210,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
   );
 };
 
