@@ -2,27 +2,21 @@
 import './global.css';
 import React, { useState, useCallback } from 'react';
 // FIX: Removed styled HOC from nativewind as it is no longer needed. ClassName props can be used directly.
-import { SafeAreaView, StatusBar, View, Platform } from 'react-native';
+import { StatusBar, View, Platform } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppContextProvider } from './context/AppContext';
 import LoginScreen from './features/auth/screens/LoginScreen';
 import ShoppingScreen from './features/shopping/screens/ShoppingScreen';
 import OrderHistoryScreen from './features/orders/screens/OrderHistoryScreen';
 import ProfileScreen from './features/profile/screens/ProfileScreen';
-import ChatbotScreen from './features/support/screens/ChatbotScreen';
+import ChatScreen from './features/support/screens/ChatScreen';
 import BottomNavBar from './components/common/BottomNavBar';
 import CartScreen from './features/cart/screens/CartScreen';
 import Header from './components/common/Header';
-import OrderDetailScreen from './features/orders/screens/OrderDetailScreen';
-import { User, Order } from './types';
+import OrderDetailDialog from './features/orders/components/dialogs/OrderDetailDialog';
+import { NotificationsDialog } from './features/notifications';
+import { User, Order, Screen } from './types';
 import { MOCK_USER } from './services/api/mockApiService';
-
-export enum Screen {
-  Shopping,
-  Orders,
-  Profile,
-  Chat,
-  Cart,
-}
 
 // FIX: Removed styled HOC.
 // const StyledSafeAreaView = styled(SafeAreaView);
@@ -31,6 +25,7 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [activeScreen, setActiveScreen] = useState<Screen>(Screen.Shopping);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleLogin = useCallback(() => {
     setUser(MOCK_USER);
@@ -49,9 +44,17 @@ const App: React.FC = () => {
     setSelectedOrder(null);
   }, []);
 
+  const handleShowNotifications = useCallback(() => {
+    setShowNotifications(true);
+  }, []);
+
+  const handleCloseNotifications = useCallback(() => {
+    setShowNotifications(false);
+  }, []);
+
   const renderScreen = () => {
     if (selectedOrder) {
-      return <OrderDetailScreen order={selectedOrder} onBack={handleBackFromDetail} />;
+      return <OrderDetailDialog visible={!!selectedOrder} order={selectedOrder} onClose={handleBackFromDetail} />;
     }
 
     switch (activeScreen) {
@@ -62,7 +65,7 @@ const App: React.FC = () => {
       case Screen.Profile:
         return <ProfileScreen onLogout={handleLogout} />;
       case Screen.Chat:
-        return <ChatbotScreen />;
+        return <ChatScreen />;
       case Screen.Cart:
         return <CartScreen />;
       default:
@@ -75,16 +78,19 @@ const App: React.FC = () => {
   }
 
   return (
-    <AppContextProvider user={user}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#f1f5f9' }}>
-        <StatusBar barStyle="light-content" backgroundColor="#10b981" />
-        <Header />
-        <View style={{ flex: 1, paddingTop: 96, paddingBottom: 64 }}>
-           {renderScreen()}
+    <SafeAreaProvider>
+      <AppContextProvider user={user}>
+        <View style={{ flex: 1, backgroundColor: '#f9fafb' }}>
+          <StatusBar barStyle="light-content" backgroundColor="#10b981" translucent={true} />
+          <Header onPressBell={handleShowNotifications} />
+          <View style={{ flex: 1, overflow: 'hidden' }}>
+             {renderScreen()}
+          </View>
+          <BottomNavBar activeScreen={activeScreen} setActiveScreen={setActiveScreen} />
+          <NotificationsDialog visible={showNotifications} onClose={handleCloseNotifications} />
         </View>
-        <BottomNavBar activeScreen={activeScreen} setActiveScreen={setActiveScreen} />
-      </SafeAreaView>
-    </AppContextProvider>
+      </AppContextProvider>
+    </SafeAreaProvider>
   );
 };
 

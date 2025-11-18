@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, Platform, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ActivityIndicator, ScrollView } from 'react-native';
 import { SparklesIcon } from '../../../components/icons/Icons';
 import { LoginScreenProps } from '../index';
 import { useLogin } from '../hooks/useLogin';
@@ -21,12 +21,16 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   } = useLogin(onLogin);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#f0f9ff' }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+      style={{ flex: 1, backgroundColor: '#f0f9ff' }}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 40}
+    >
+      <ScrollView 
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24 }}
+        keyboardShouldPersistTaps="handled"
+        scrollEnabled={false}
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24 }}>
           <View style={{
             borderRadius: 24,
             backgroundColor: '#ffffff',
@@ -139,7 +143,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                   maxLength={6}
                   value={otp}
                   onChangeText={(value) => {
-                    setOtp(value);
+                    // Ensure only 6 digits are accepted
+                    const numericValue = value.replace(/[^0-9]/g, '').slice(0, 6);
+                    setOtp(numericValue);
                     setError('');
                   }}
                   placeholder="______"
@@ -204,7 +210,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
   );
 };
 

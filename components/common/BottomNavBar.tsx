@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Screen } from '../../App';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Screen } from '../../types';
 import { HomeIcon, ListBulletIcon, UserCircleIcon, ChatBubbleLeftRightIcon, ShoppingCartIcon } from '../icons/Icons';
 import { useAppContext } from '../../context/AppContext';
 
@@ -24,38 +25,66 @@ const NavItem: React.FC<{
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingTop: 8,
-      paddingBottom: 4,
+      paddingTop: 5,
+      paddingBottom: 5,
+      backgroundColor: isActive ? '#f0fdf4' : 'transparent',
+      borderTopWidth: isActive ? 3 : 0,
+      borderTopColor: isActive ? '#059669' : 'transparent',
+      borderRadius: isActive ? 12 : 0,
     }}
   >
     <View style={{ position: 'relative' }}>
-      <View>
-        <IconComponent color={isActive ? '#059669' : '#6b7280'} size={24} />
+      <View style={{
+        width: 40,
+        height: 40,
+        borderRadius: 12,
+        backgroundColor: isActive ? '#d1fae5' : 'transparent',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <IconComponent color={isActive ? '#059669' : '#9ca3af'} size={isActive ? 26 : 24} />
       </View>
       {badgeCount && badgeCount > 0 ? (
         <View style={{
           position: 'absolute',
-          top: -4,
-          right: -14,
+          top: -6,
+          right: -8,
           alignItems: 'center',
           justifyContent: 'center',
+          minWidth: 24,
           paddingHorizontal: 6,
           paddingVertical: 2,
-          backgroundColor: '#dc2626',
-          borderRadius: 9999,
+          backgroundColor: '#ef4444',
+          borderRadius: 12,
+          borderWidth: 2,
+          borderColor: '#ffffff',
         }}>
-          <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#ffffff' }}>
+          <Text style={{ 
+            fontSize: 11, 
+            fontWeight: '700', 
+            color: '#ffffff',
+            textAlign: 'center',
+          }}>
             {badgeCount}
           </Text>
         </View>
       ) : null}
     </View>
-    <Text style={{ marginTop: 4, fontSize: 10, color: isActive ? '#059669' : '#6b7280' }}>{label}</Text>
+    <Text style={{ 
+      marginTop: 6, 
+      fontSize: 11, 
+      fontWeight: isActive ? '600' : '500',
+      color: isActive ? '#059669' : '#9ca3af',
+      textAlign: 'center',
+    }}>
+      {label}
+    </Text>
   </TouchableOpacity>
 );
 
 const BottomNavBar: React.FC<BottomNavBarProps> = ({ activeScreen, setActiveScreen }) => {
   const { cart } = useAppContext();
+  const insets = useSafeAreaInsets();
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
   const navItems = [
@@ -68,23 +97,24 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ activeScreen, setActiveScre
 
   return (
     <View style={{
-      position: 'absolute',
-      bottom: 0, // Sát mép dưới
-      left: 0,
-      right: 0,
       backgroundColor: '#ffffff',
       borderTopWidth: 1,
       borderTopColor: '#e5e7eb',
-      borderTopLeftRadius: 16,
-      borderTopRightRadius: 16,
-      paddingBottom: 16, // Đệm bên trong cho mềm
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      paddingBottom: 1 + insets.bottom,
+      paddingTop: 1,
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: -2 },
-      shadowOpacity: 0.05,
-      shadowRadius: 4,
-      elevation: 5,
+      shadowOffset: { width: 0, height: -4 },
+      shadowOpacity: 0.08,
+      shadowRadius: 6,
+      elevation: 8,
     }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+      <View style={{ 
+        flexDirection: 'row', 
+        justifyContent: 'space-around',
+        paddingHorizontal: 4,
+      }}>
         {navItems.map((item) => (
           <NavItem
             key={item.screen}

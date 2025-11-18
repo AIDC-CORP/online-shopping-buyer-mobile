@@ -1,12 +1,11 @@
-
 import React, { useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { ChatMessage } from '../../../types';
-import { SparklesIcon } from '../../../components/icons/Icons';
-import { useChatbot } from '../hooks/useChatbot';
+import { UserCircleIcon } from '../../../components/icons/Icons';
+import { useSellerChat } from '../hooks/useSellerChat';
 
-const ChatbotScreen: React.FC = () => {
-  const { messages, input, setInput, isLoading, flatListRef, handleSend, user } = useChatbot();
+const SellerChatScreen: React.FC = () => {
+  const { messages, input, setInput, isLoading, flatListRef, handleSend, user } = useSellerChat();
 
   useEffect(() => {
     const showListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -21,16 +20,16 @@ const ChatbotScreen: React.FC = () => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? "padding" : "padding"}
       style={{ flex: 1 }}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 175 : 175}
     >
       <View style={{ flex: 1, backgroundColor: '#ffffff', marginHorizontal: 16, marginVertical: 8, borderRadius: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }}>
         <View style={{ paddingHorizontal: 16, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: '#e5e7eb', flexDirection: 'row', alignItems: 'center' }}>
-            <SparklesIcon size={24} color="#34d399"/>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1f2937', marginLeft: 8 }}>Trợ lý AI</Text>
+            <UserCircleIcon size={24} color="#059669"/>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1f2937', marginLeft: 8 }}>Chat với Seller</Text>
         </View>
-      
+
         <ScrollView
             ref={flatListRef}
             keyboardShouldPersistTaps="handled"
@@ -47,7 +46,7 @@ const ChatbotScreen: React.FC = () => {
                   justifyContent: item.sender === 'user' ? 'flex-end' : 'flex-start',
                   paddingHorizontal: 16,
                 }}>
-                    {item.sender === 'bot' && <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#10b981', alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#ffffff', fontSize: 12, fontWeight: 'bold' }}>AI</Text></View>}
+                    {item.sender === 'bot' && <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#059669', alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#ffffff', fontSize: 12, fontWeight: 'bold' }}>NV</Text></View>}
                     <View style={{
                       maxWidth: '80%',
                       paddingHorizontal: 12,
@@ -64,7 +63,7 @@ const ChatbotScreen: React.FC = () => {
             ))}
             {isLoading && (
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8, marginVertical: 8, justifyContent: 'flex-start', paddingHorizontal: 16 }}>
-                    <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#10b981', alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#ffffff', fontSize: 12, fontWeight: 'bold' }}>AI</Text></View>
+                    <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#059669', alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#ffffff', fontSize: 12, fontWeight: 'bold' }}>NV</Text></View>
                     <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, backgroundColor: '#e5e7eb' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                             <View style={{ width: 8, height: 8, backgroundColor: '#6b7280', borderRadius: 4 }} />
@@ -81,7 +80,7 @@ const ChatbotScreen: React.FC = () => {
             <TextInput
                 value={input}
                 onChangeText={setInput}
-                placeholder="Hỏi tôi bất cứ điều gì..."
+                placeholder="Nhập tin nhắn của bạn..."
                 placeholderTextColor="#9ca3af"
                 editable={!isLoading}
                 onSubmitEditing={handleSend}
@@ -117,4 +116,4 @@ const ChatbotScreen: React.FC = () => {
   );
 };
 
-export default ChatbotScreen;
+export default SellerChatScreen;

@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Alert, ActivityIndicator } from 'react-native';
 import { useCart } from '../../hooks/useCart';
-
-interface CheckoutDialogProps {
-  visible: boolean;
-  onClose: () => void;
-  onSuccess: () => void;
-}
+import { CheckoutDialogProps } from '../..';
 
 const CheckoutDialog: React.FC<CheckoutDialogProps> = ({ visible, onClose, onSuccess }) => {
   const { totalWithShipping, checkoutWithWallet, isCheckingOut, walletBalance } = useCart();

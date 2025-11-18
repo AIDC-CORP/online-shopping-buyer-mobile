@@ -10,10 +10,10 @@ const ShoppingScreen: React.FC = () => {
   const { mode, setMode, products, isLoading, searchTerm, setSearchTerm, handleSearch } = useShopping();
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb' }} contentContainerStyle={{ padding: 16 }}>
-      <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#1f2937', marginBottom: 16 }}>Lên kế hoạch bữa ăn</Text>
+    <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb' }} contentContainerStyle={{ paddingHorizontal: 0, paddingVertical: 16 }}>
+      <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#1f2937', marginBottom: 16, paddingHorizontal: 16 }}>Lên kế hoạch bữa ăn</Text>
 
-      <View style={{ flexDirection: 'row', backgroundColor: '#e5e7eb', borderRadius: 8, padding: 4, marginBottom: 16 }}>
+      <View style={{ flexDirection: 'row', backgroundColor: '#e5e7eb', borderRadius: 8, padding: 4, marginBottom: 16, marginHorizontal: 16 }}>
         <TouchableOpacity
           onPress={() => setMode(ShoppingMode.AI)}
           style={{
@@ -62,7 +62,7 @@ const ShoppingScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <View>
+      <View style={{ paddingHorizontal: 16 }}>
         {mode === ShoppingMode.AI && <AiMenuSuggestion />}
         {mode === ShoppingMode.Manual && (
           <View>

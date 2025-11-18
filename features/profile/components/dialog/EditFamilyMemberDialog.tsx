@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { useFamilyMember } from '../../hooks/useFamilyMember';
+import { useEditFamilyMember } from '../../hooks/useEditFamilyMember';
 
 interface EditFamilyMemberProps {
   onClose: () => void;
@@ -8,7 +8,7 @@ interface EditFamilyMemberProps {
 }
 
 const EditFamilyMember: React.FC<EditFamilyMemberProps> = ({ onClose, memberIndex }) => {
-  const { profile, handleEditFamilyMember, isLoading, activityLevels, activityLevelLabels } = useFamilyMember();
+  const { profile, handleEditFamilyMember, isLoading, activityLevels, activityLevelLabels } = useEditFamilyMember();
   const member = profile!.familyMembers[memberIndex];
 
   const [name, setName] = useState(member.name);
