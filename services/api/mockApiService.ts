@@ -1,11 +1,11 @@
-import { User, Product, Order, WalletTransaction } from '../../types';
+import { User, Product, Order, WalletTransaction, Notification } from '../../types';
 
 export const MOCK_USER: User = {
   id: 'user-123',
   phone: '0901234567',
   name: 'Nguyễn Văn A',
   age: 30,
-  location: 'Hồ Chí Minh',
+  location: ['Hồ Chí Minh'],
   height: 175,
   weight: 70,
   activityLevel: 'medium',
@@ -13,8 +13,8 @@ export const MOCK_USER: User = {
   budget: 1500000,
   walletBalance: 500000, // 500k VND
   familyMembers: [
-    { name: 'Nguyễn Thị B', age: 28, location: 'Hồ Chí Minh', height: 165, weight: 55, activityLevel: 'medium', allergies: [] },
-    { name: 'Nguyễn Văn C', age: 5, location: 'Hồ Chí Minh', height: 110, weight: 20, activityLevel: 'high', allergies: ['Sữa'] },
+    { name: 'Nguyễn Thị B', age: 28, location: ['Hồ Chí Minh'], height: 165, weight: 55, activityLevel: 'medium', allergies: [] },
+    { name: 'Nguyễn Văn C', age: 5, location: ['Hồ Chí Minh'], height: 110, weight: 20, activityLevel: 'high', allergies: ['Sữa'] },
   ],
 };
 
@@ -88,6 +88,52 @@ export const MOCK_WALLET_TRANSACTIONS: WalletTransaction[] = [
   },
 ];
 
+// Mock Notifications
+export const MOCK_NOTIFICATIONS: Notification[] = [
+  {
+    id: 'notif-001',
+    type: 'order_update',
+    title: 'Đơn hàng đã được giao thành công',
+    message: 'Đơn hàng DH001 của bạn đã được giao thành công. Cảm ơn bạn đã tin tưởng FreshMart!',
+    date: '2024-07-28T16:00:00Z',
+    isRead: false,
+    orderId: 'DH001',
+  },
+  {
+    id: 'notif-002',
+    type: 'promotion',
+    title: 'Giảm giá 20% cho khách hàng thân thiết',
+    message: 'Chúc mừng! Bạn được giảm 20% cho đơn hàng tiếp theo. Áp dụng cho tất cả sản phẩm.',
+    date: '2024-07-27T10:00:00Z',
+    isRead: true,
+  },
+  {
+    id: 'notif-003',
+    type: 'order_update',
+    title: 'Đơn hàng đang được giao',
+    message: 'Đơn hàng DH002 đang trên đường giao đến bạn. Thời gian dự kiến: 30 phút.',
+    date: '2024-07-26T14:00:00Z',
+    isRead: false,
+    orderId: 'DH002',
+  },
+  {
+    id: 'notif-004',
+    type: 'system',
+    title: 'Cập nhật ứng dụng',
+    message: 'Phiên bản mới của ứng dụng đã có sẵn. Cập nhật ngay để trải nghiệm các tính năng mới!',
+    date: '2024-07-25T09:00:00Z',
+    isRead: true,
+  },
+  {
+    id: 'notif-005',
+    type: 'reminder',
+    title: 'Nhắc nhở bổ sung dinh dưỡng',
+    message: 'Dựa trên kế hoạch ăn uống của bạn, hãy bổ sung thêm rau xanh và trái cây tươi.',
+    date: '2024-07-24T08:00:00Z',
+    isRead: false,
+  },
+];
+
 // --- API Simulation ---
 
 const apiDelay = <T,>(data: T, delay: number = 500): Promise<T> => 
@@ -127,4 +173,11 @@ export const topUpWallet = (amount: number, method: string): Promise<{ success: 
     const newBalance = MOCK_USER.walletBalance + amount;
     // In a real app, this would update the user's balance on the server
     return apiDelay({ success: true, newBalance }, 1000);
+}
+
+export const fetchNotifications = (): Promise<Notification[]> => apiDelay(MOCK_NOTIFICATIONS);
+
+export const markNotificationAsRead = (notificationId: string): Promise<{ success: boolean }> => {
+    console.log(`Marking notification ${notificationId} as read`);
+    return apiDelay({ success: true }, 300);
 }

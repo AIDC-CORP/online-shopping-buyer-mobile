@@ -1,18 +1,112 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { useProfile } from '../../hooks/useProfile';
-
-interface EditProfileProps {
-  onClose: () => void;
-}
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { EditProfileProps } from '../../index';
+import ProfileService from '../../../../services/profile/ProfileService';
+import type { UserProfile } from '../../../../services/profile/ProfileService';
 
 const EditProfile: React.FC<EditProfileProps> = ({ onClose }) => {
-  const { profile, isLoading, handleInputChange, handleSave } = useProfile();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const onSave = async () => {
-    await handleSave();
-    onClose();
+  // Form states
+  const [age, setAge] = useState('');
+  const [location, setLocation] = useState('');
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [activityLevel, setActivityLevel] = useState<'low' | 'medium' | 'high'>('medium');
+  const [allergies, setAllergies] = useState('');
+
+  const activityLevelLabels = { low: 'Thấp', medium: 'Trung bình', high: 'Cao' };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      setIsLoading(true);
+      const data = await ProfileService.getUserProfile();
+      setProfile(data);
+      
+      if (data) {
+        setAge(data.age?.toString() || '');
+        setLocation(data.location?.join(', ') || '');
+        setHeight(data.health?.height?.toString() || '');
+        setWeight(data.health?.weight?.toString() || '');
+        setActivityLevel(data.health?.activity_level || 'medium');
+        setAllergies(data.health?.allergies?.join(', ') || '');
+      }
+    } catch (error) {
+      console.error('[EditProfile] Failed to fetch profile:', error);
+      Alert.alert('Lỗi', 'Không thể tải thông tin hồ sơ');
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      
+      const updateData: any = {};
+      
+      if (age) {
+        const ageNum = parseInt(age, 10);
+        if (!isNaN(ageNum) && ageNum > 0) {
+          updateData.age = ageNum;
+        }
+      }
+      
+      if (location) {
+        updateData.location = [location];
+      }
+
+      const health: any = {};
+      if (height) {
+        const heightNum = parseFloat(height);
+        if (!isNaN(heightNum) && heightNum > 0) {
+          health.height = heightNum;
+        }
+      }
+      
+      if (weight) {
+        const weightNum = parseFloat(weight);
+        if (!isNaN(weightNum) && weightNum > 0) {
+          health.weight = weightNum;
+        }
+      }
+      
+      health.activity_level = activityLevel;
+      
+      if (allergies) {
+        health.allergies = allergies.split(',').map(a => a.trim()).filter(Boolean);
+      }
+
+      if (Object.keys(health).length > 0) {
+        updateData.health = health;
+      }
+
+      await ProfileService.updateUserProfile(updateData);
+      Alert.alert('Thành công', 'Hồ sơ đã được cập nhật', [
+        { text: 'OK', onPress: onClose }
+      ]);
+    } catch (error) {
+      console.error('[EditProfile] Failed to update profile:', error);
+      Alert.alert('Lỗi', 'Không thể cập nhật hồ sơ');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f9fafb' }}>
+        <ActivityIndicator size="large" color="#10b981" />
+        <Text style={{ marginTop: 16, color: '#6b7280' }}>Đang tải...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb', padding: 16 }}>
@@ -25,29 +119,12 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose }) => {
 
       <View style={{ paddingHorizontal: 24, paddingVertical: 24, backgroundColor: '#ffffff', borderRadius: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
         <View style={{ marginBottom: 16 }}>
-          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Tên</Text>
-          <TextInput
-            value={profile.name}
-            onChangeText={(text) => handleInputChange('name', text)}
-            style={{
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              fontSize: 16,
-              borderWidth: 1,
-              borderColor: '#d1d5db',
-              borderRadius: 6,
-              backgroundColor: '#ffffff',
-              color: '#1f2937',
-            }}
-          />
-        </View>
-
-        <View style={{ marginBottom: 16 }}>
           <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Tuổi</Text>
           <TextInput
             keyboardType="numeric"
-            value={String(profile.age)}
-            onChangeText={(text) => handleInputChange('age', Number(text))}
+            value={age}
+            onChangeText={setAge}
+            placeholder="Nhập tuổi"
             style={{
               paddingHorizontal: 12,
               paddingVertical: 8,
@@ -64,8 +141,9 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose }) => {
         <View style={{ marginBottom: 16 }}>
           <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Địa điểm</Text>
           <TextInput
-            value={profile.location}
-            onChangeText={(text) => handleInputChange('location', text)}
+            value={location}
+            onChangeText={setLocation}
+            placeholder="Nhập địa điểm"
             style={{
               paddingHorizontal: 12,
               paddingVertical: 8,
@@ -79,37 +157,119 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose }) => {
           />
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 16 }}>
-          <TouchableOpacity
-            onPress={onClose}
+        <View style={{ flexDirection: 'row', gap: 16, marginBottom: 16 }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Chiều cao (cm)</Text>
+            <TextInput
+              keyboardType="numeric"
+              value={height}
+              onChangeText={setHeight}
+              placeholder="Nhập chiều cao"
+              style={{
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                fontSize: 16,
+                borderWidth: 1,
+                borderColor: '#d1d5db',
+                borderRadius: 6,
+                backgroundColor: '#ffffff',
+                color: '#1f2937',
+              }}
+            />
+          </View>
+
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Cân nặng (kg)</Text>
+            <TextInput
+              keyboardType="numeric"
+              value={weight}
+              onChangeText={setWeight}
+              placeholder="Nhập cân nặng"
+              style={{
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                fontSize: 16,
+                borderWidth: 1,
+                borderColor: '#d1d5db',
+                borderRadius: 6,
+                backgroundColor: '#ffffff',
+                color: '#1f2937',
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 8 }}>Mức độ hoạt động</Text>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            {(['low', 'medium', 'high'] as const).map((level) => (
+              <TouchableOpacity
+                key={level}
+                onPress={() => setActivityLevel(level)}
+                style={{
+                  flex: 1,
+                  paddingVertical: 12,
+                  borderRadius: 6,
+                  borderWidth: 1,
+                  borderColor: activityLevel === level ? '#10b981' : '#d1d5db',
+                  backgroundColor: activityLevel === level ? '#d1fae5' : '#ffffff',
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontWeight: '600',
+                    color: activityLevel === level ? '#047857' : '#6b7280',
+                  }}
+                >
+                  {activityLevelLabels[level]}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Dị ứng (cách nhau bởi dấu phẩy)</Text>
+          <TextInput
+            value={allergies}
+            onChangeText={setAllergies}
+            placeholder="VD: Sữa, Đậu phộng"
+            multiline
+            numberOfLines={3}
             style={{
-              flex: 1,
-              paddingHorizontal: 16,
-              paddingVertical: 12,
-              backgroundColor: '#d1d5db',
-              borderRadius: 8,
-              alignItems: 'center',
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              fontSize: 16,
+              borderWidth: 1,
+              borderColor: '#d1d5db',
+              borderRadius: 6,
+              backgroundColor: '#ffffff',
+              color: '#1f2937',
+              textAlignVertical: 'top',
             }}
-          >
-            <Text style={{ color: '#374151', textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Hủy</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={onSave}
-            disabled={isLoading}
-            style={{
-              flex: 1,
-              paddingHorizontal: 16,
-              paddingVertical: 12,
-              backgroundColor: isLoading ? '#a7f3d0' : '#10b981',
-              borderRadius: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {isLoading ? <ActivityIndicator color="#ffffff" size="small" /> : <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Lưu</Text>}
-          </TouchableOpacity>
+          />
         </View>
       </View>
+
+      <TouchableOpacity
+        onPress={handleSave}
+        disabled={isSaving}
+        style={{
+          marginTop: 24,
+          marginBottom: 40,
+          paddingVertical: 16,
+          backgroundColor: isSaving ? '#9ca3af' : '#10b981',
+          borderRadius: 8,
+          alignItems: 'center',
+        }}
+      >
+        {isSaving ? (
+          <ActivityIndicator color="#ffffff" />
+        ) : (
+          <Text style={{ color: '#ffffff', fontSize: 16, fontWeight: '600' }}>Lưu thay đổi</Text>
+        )}
+      </TouchableOpacity>
     </ScrollView>
   );
 };

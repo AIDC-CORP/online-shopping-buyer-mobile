@@ -1,37 +1,53 @@
 
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 import { useAppContext } from '../../context/AppContext';
-import { UserCircleIcon } from '../icons/Icons';
+import { BellIcon } from '../icons/Icons';
 
-const Header: React.FC = () => {
+
+interface HeaderProps {
+    title?: string;
+    isShowUser?: boolean;
+    isHasBackButton?: boolean;
+    onPressBack?: () => void;
+    rightView?: React.ReactNode;
+    onPressBell?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ title = 'Xin chào', isShowUser = true, isHasBackButton, onPressBack, rightView, onPressBell }) => {
     const { user } = useAppContext();
 
     if (!user) return null;
 
     return (
-        <View style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 40,
-            backgroundColor: '#10b981',
-            paddingTop: 48,
-            paddingBottom: 16,
-            paddingHorizontal: 16,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 3,
-        }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <View>
-                    <Text style={{ fontSize: 12, color: '#ffffff' }}>Xin chào,</Text>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#ffffff' }}>{user.name}</Text>
+        <View style={{ position: 'relative' }}>
+            {/* Main header background */}
+            <View style={{ backgroundColor: '#10b981', paddingTop: 42, paddingBottom: 1, paddingHorizontal: 16 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View>
+                            <Text style={{ fontSize: 12, color: '#ffffff', opacity: 0.9 }}>{title}</Text>
+                            {isShowUser && <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#ffffff', marginTop: 2 }}>{user.name}</Text>}
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={onPressBell || (() => console.log('Bell icon pressed'))} style={{ marginRight: 16 }}>
+                            <BellIcon color="white" />
+                        </TouchableOpacity>
+                        {rightView}
+                    </View>
                 </View>
-                <UserCircleIcon color="white" />
+            </View>
+            
+            {/* Wavy bottom border using SVG */}
+            <View style={{ height: 40, overflow: 'hidden', backgroundColor: 'transparent' }}>
+                <Svg height="40" width="100%" viewBox="0 0 1440 80" preserveAspectRatio="none">
+                    <Path
+                        d="M0,40 C240,65 480,65 720,40 C960,15 1200,15 1440,40 L1440,0 L0,0 Z"
+                        fill="#10b981"
+                    />
+                </Svg>
             </View>
         </View>
     );

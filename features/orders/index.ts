@@ -4,7 +4,8 @@ export interface OrderHistoryScreenProps {
   onSelectOrder: (order: Order) => void;
 }
 
-export interface OrderDetailScreenProps {
+export interface OrderDetailDialogProps {
+  visible: boolean;
+  onClose: () => void;
   order: Order;
-  onBack: () => void;
 }

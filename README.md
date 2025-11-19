@@ -19,20 +19,7 @@ A React Native Expo app that provides AI-powered meal planning and grocery shopp
 
 ```bash
 yarn install
-```
 
-### 2. Configure Environment Variables
-
-Create a `.env` file in the root directory:
-
-```bash
-cp .env.example .env
-```
-
-Then edit `.env` and add your Gemini API key:
-
-```env
-EXPO_PUBLIC_GEMINI_API_KEY=your_actual_api_key_here
 ```
 
 ### 3. Start the Development Server
@@ -43,22 +30,8 @@ yarn start
 
 This will start the Expo development server. You'll see a QR code in your terminal.
 
-### 4. Run on Device/Emulator
 
-**On iOS:**
-```bash
-npm run ios
-```
 
-**On Android:**
-```bash
-npm run android
-```
-
-**On Web (experimental):**
-```bash
-npm run web
-```
 
 **Using Expo Go:**
 - Install Expo Go from App Store (iOS) or Play Store (Android)
@@ -83,25 +56,117 @@ npm run web
 
 ## 📂 Project Structure
 
+**Core Files:**
+- `App.tsx` - Main app component with custom navigation
+- `App.test.tsx` - Jest tests for App component
+- `index.tsx` - Entry point
+- `types.ts` - TypeScript type definitions
+- `global.css` - Global CSS styles for NativeWind
+
+**Directories:**
+
 ```
-├── App.tsx                 # Main app component with custom navigation
-├── index.tsx              # Entry point
-├── components/            # Reusable UI components
-│   ├── common/           # Shared components (Header, BottomNavBar, etc.)
-│   └── icons/            # Icon components
-├── features/              # Feature-specific modules
-│   ├── auth/             # Authentication screens and logic
-│   ├── shopping/         # Shopping screens and AI meal planning
-│   ├── cart/             # Cart management
-│   ├── orders/           # Order history and details
-│   ├── profile/          # User profile management
-│   └── support/          # AI chatbot support
-├── services/              # API services and integrations
-│   ├── geminiService.ts  # AI integration (currently mocked)
-│   └── api/              # Mock API services
-├── context/               # React context for global state
-├── types.ts              # TypeScript type definitions
-└── assets/               # Static assets and images
+├── __mocks__/
+│   └── styleMock.ts                    # CSS mock for testing
+│
+├── __tests__/
+│   ├── auth-flow.test.tsx
+│   ├── otp-login-basic.test.tsx
+│   └── useLogin.test.ts
+│
+├── assets/                             # Static assets and images
+│   └── README.md
+│
+├── components/
+│   ├── common/                         # Shared UI components
+│   │   ├── BottomNavBar.tsx
+│   │   ├── Header.tsx
+│   │   └── Spinner.tsx
+│   └── icons/
+│       └── Icons.tsx
+│
+├── context/
+│   └── AppContext.tsx                  # Global state (user, cart, wallet)
+│
+├── features/                           # Feature-specific modules
+│   ├── auth/
+│   │   ├── index.ts
+│   │   ├── components/
+│   │   ├── hooks/useLogin.ts
+│   │   └── screens/LoginScreen.tsx
+│   │
+│   ├── shopping/
+│   │   ├── index.ts
+│   │   ├── components/
+│   │   │   ├── AiMenuSuggestion.tsx
+│   │   │   ├── ProductCard.tsx
+│   │   │   └── ProductList.tsx
+│   │   ├── hooks/
+│   │   │   ├── useAiMenuSuggestion.ts
+│   │   │   └── useShopping.ts
+│   │   └── screens/ShoppingScreen.tsx
+│   │
+│   ├── cart/
+│   │   ├── index.ts
+│   │   ├── components/dialog/CheckoutDialog.tsx
+│   │   ├── hooks/useCart.ts
+│   │   └── screens/CartScreen.tsx
+│   │
+│   ├── orders/
+│   │   ├── index.ts
+│   │   ├── components/dialogs/OrderDetailDialog.tsx
+│   │   ├── hooks/
+│   │   │   ├── useOrderDetail.ts
+│   │   │   └── useOrderHistory.ts
+│   │   └── screens/OrderHistoryScreen.tsx
+│   │
+│   ├── profile/
+│   │   ├── index.ts
+│   │   ├── components/
+│   │   │   ├── TransactionHistory.tsx
+│   │   │   ├── WalletCard.tsx
+│   │   │   └── dialog/
+│   │   │       ├── AddFamilyMemberDialog.tsx
+│   │   │       ├── EditFamilyMemberDialog.tsx
+│   │   │       ├── EditProfileDialog.tsx
+│   │   │       └── TopUpDialog.tsx
+│   │   ├── hooks/
+│   │   │   ├── useAddFamilyMember.ts
+│   │   │   ├── useEditFamilyMember.ts
+│   │   │   └── useEditProfile.ts
+│   │   └── screens/ProfileScreen.tsx
+│   │
+│   ├── notifications/
+│   │   ├── index.ts
+│   │   ├── components/NotificationsDialogs.tsx
+│   │   ├── hooks/useNotifications.ts
+│   │   └── screens/
+│   │
+│   └── support/
+│       ├── index.ts
+│       ├── components/
+│       │   ├── ChatAI.tsx
+│       │   └── ChatSeller.tsx
+│       ├── hooks/
+│       │   ├── useChatbot.ts
+│       │   └── useSellerChat.ts
+│       └── screens/ChatScreen.tsx
+│
+├── services/
+│   ├── geminiService.ts                # AI integration (currently mocked)
+│   └── api/mockApiService.ts           # Mock API services
+│
+└── Configuration Files
+    ├── app.json                        # Expo app configuration
+    ├── babel.config.js                 # Babel configuration
+    ├── eas.json                        # Expo Application Services config
+    ├── jest.config.json                # Jest testing configuration
+    ├── metro.config.js                 # Metro bundler config with NativeWind
+    ├── nativewind-env.d.ts             # NativeWind TypeScript declarations
+    ├── package.json                    # Dependencies and scripts
+    ├── start.sh                        # Automated setup script
+    ├── tailwind.config.js              # Tailwind CSS configuration
+    └── tsconfig.json                   # TypeScript configuration
 ```
 
 ## 🔧 Configuration Files
@@ -149,7 +214,7 @@ yarn add -D @types/react @types/react-native
 ```bash
 rm -rf node_modules .expo .metro-cache
 yarn install
-npx expo start -c
+yarn start -c
 ```
 
 ## 📝 Development Notes
