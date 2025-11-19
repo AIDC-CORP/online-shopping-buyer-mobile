@@ -14,7 +14,7 @@ export interface ChatAttachment {
 
 export interface ChatConversation {
   id: string;
-  sellerId: string;
+  customerId: string;
   lastMessage: string | null;
   unreadCount: number;
   timestamp: string;

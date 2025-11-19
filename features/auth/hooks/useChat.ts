@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ChatService from '../../services/chat/ChatService';
-import { ChatMessage, SendMessageRequest, WSMessage } from '../../services/chat/types';
+import ChatService from '../../../services/chat/ChatService';
+import { ChatMessage, SendMessageRequest, WSMessage } from '../../../services/chat/types';
 
 export function useChat(conversationId: string) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);

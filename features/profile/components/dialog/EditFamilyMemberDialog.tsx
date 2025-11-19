@@ -1,36 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { useEditFamilyMember } from '../../hooks/useEditFamilyMember';
+import ProfileService from '../../../../services/profile/ProfileService';
 
 interface EditFamilyMemberProps {
   onClose: () => void;
-  memberIndex: number;
+  member: {
+    id?: string;
+    first_name?: string;
+    last_name?: string;
+    age?: number;
+    location?: string[] | null;
+    health?: {
+      height?: number;
+      weight?: number;
+      activity_level?: 'low' | 'medium' | 'high';
+      allergies?: string[];
+    };
+  };
 }
 
-const EditFamilyMember: React.FC<EditFamilyMemberProps> = ({ onClose, memberIndex }) => {
-  const { profile, handleEditFamilyMember, isLoading, activityLevels, activityLevelLabels } = useEditFamilyMember();
-  const member = profile!.familyMembers[memberIndex];
+const EditFamilyMember: React.FC<EditFamilyMemberProps> = ({ onClose, member }) => {
+  const { handleEditFamilyMember, isLoading, activityLevels, activityLevelLabels } = useEditFamilyMember();
 
-  const [name, setName] = useState(member.name);
-  const [age, setAge] = useState(String(member.age));
-  const [location, setLocation] = useState(member.location);
-  const [height, setHeight] = useState(String(member.height));
-  const [weight, setWeight] = useState(String(member.weight));
-  const [activityLevel, setActivityLevel] = useState<'low' | 'medium' | 'high'>(member.activityLevel);
-  const [allergies, setAllergies] = useState(member.allergies.join(', '));
+  console.log('[EditFamilyMember] Received member:', member);
+  console.log('[EditFamilyMember] Member ID:', member.id);
+
+  const fullName = `${member.first_name || ''} ${member.last_name || ''}`.trim();
+  
+  const [name, setName] = useState(fullName);
+  const [age, setAge] = useState(String(member.age || ''));
+  const [location, setLocation] = useState(Array.isArray(member.location) ? member.location.join(', ') : '');
+  const [height, setHeight] = useState(String(member.health?.height || ''));
+  const [weight, setWeight] = useState(String(member.health?.weight || ''));
+  const [activityLevel, setActivityLevel] = useState<'low' | 'medium' | 'high'>(member.health?.activity_level || 'medium');
+  const [allergies, setAllergies] = useState(member.health?.allergies?.join(', ') || '');
 
   const onSave = async () => {
-    if (!name || !age || !location || !height || !weight) return;
-    await handleEditFamilyMember(memberIndex, {
-      name,
-      age: Number(age),
-      location,
-      height: Number(height),
-      weight: Number(weight),
-      activityLevel,
-      allergies: allergies.split(',').map(s => s.trim()).filter(s => s)
-    });
-    onClose();
+    if (!name || !age || !height || !weight) {
+      Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+      return;
+    }
+    
+    if (!member.id) {
+      Alert.alert('Lỗi', 'Không tìm thấy ID thành viên');
+      return;
+    }
+    
+    try {
+      await handleEditFamilyMember(member.id, {
+        name,
+        age: Number(age),
+        location: location.split(',').map(s => s.trim()).filter(s => s),
+        height: Number(height),
+        weight: Number(weight),
+        activityLevel,
+        allergies: allergies.split(',').map(s => s.trim()).filter(s => s)
+      });
+      onClose();
+    } catch (error) {
+      Alert.alert('Lỗi', 'Không thể cập nhật thông tin thành viên');
+    }
+  };
+
+  const onDelete = async () => {
+    if (!member.id) {
+      Alert.alert('Lỗi', 'Không tìm thấy ID thành viên');
+      return;
+    }
+
+    Alert.alert(
+      'Xác nhận xóa',
+      `Bạn có chắc chắn muốn xóa thành viên "${fullName}"?`,
+      [
+        {
+          text: 'Hủy',
+          style: 'cancel'
+        },
+        {
+          text: 'Xóa',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await ProfileService.deleteMembers([member.id!]);
+              Alert.alert('Thành công', 'Đã xóa thành viên');
+              onClose();
+            } catch (error) {
+              Alert.alert('Lỗi', 'Không thể xóa thành viên');
+            }
+          }
+        }
+      ]
+    );
   };
 
   return (
@@ -195,7 +256,24 @@ const EditFamilyMember: React.FC<EditFamilyMemberProps> = ({ onClose, memberInde
           />
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 16 }}>
+        {/* Delete button */}
+        <TouchableOpacity
+          onPress={onDelete}
+          style={{
+            marginTop: 24,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            backgroundColor: '#fee2e2',
+            borderRadius: 8,
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: '#fecaca',
+          }}
+        >
+          <Text style={{ color: '#dc2626', textAlign: 'center', fontWeight: '600', fontSize: 16 }}>🗑️ Xóa thành viên</Text>
+        </TouchableOpacity>
+
+        <View style={{ flexDirection: 'row', gap: 16, marginTop: 16 }}>
           <TouchableOpacity
             onPress={onClose}
             style={{
@@ -211,7 +289,7 @@ const EditFamilyMember: React.FC<EditFamilyMemberProps> = ({ onClose, memberInde
           </TouchableOpacity>
           <TouchableOpacity
             onPress={onSave}
-            disabled={isLoading || !name || !age || !location || !height || !weight}
+            disabled={isLoading || !name || !age || !height || !weight}
             style={{
               flex: 1,
               paddingHorizontal: 16,

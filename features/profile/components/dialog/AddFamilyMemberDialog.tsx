@@ -8,7 +8,8 @@ interface AddProfileProps {
 
 const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
   const { handleAddFamilyMember, isLoading, activityLevels, activityLevelLabels } = useAddFamilyMember();
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [age, setAge] = useState('');
   const [location, setLocation] = useState('');
   const [height, setHeight] = useState('');
@@ -17,9 +18,12 @@ const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
   const [allergies, setAllergies] = useState('');
 
   const onSave = async () => {
-    if (!name || !age || !location || !height || !weight) return;
+    if (!firstName.trim() || !lastName.trim() || !age || !height || !weight) {
+      alert('Vui lòng nhập đầy đủ họ, tên, tuổi, chiều cao và cân nặng');
+      return;
+    }
     await handleAddFamilyMember({ 
-      name, 
+      name: `${firstName.trim()} ${lastName.trim()}`, 
       age: Number(age), 
       location, 
       height: Number(height), 
@@ -41,11 +45,30 @@ const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
 
       <View style={{ paddingHorizontal: 24, paddingVertical: 24, backgroundColor: '#ffffff', borderRadius: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
         <View style={{ marginBottom: 16 }}>
-          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Tên</Text>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Họ <Text style={{ color: '#ef4444' }}>*</Text></Text>
           <TextInput
-            value={name}
-            onChangeText={setName}
-            placeholder="Nhập tên"
+            value={firstName}
+            onChangeText={setFirstName}
+            placeholder="Nhập họ (VD: Nguyễn)"
+            style={{
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              fontSize: 16,
+              borderWidth: 1,
+              borderColor: '#d1d5db',
+              borderRadius: 6,
+              backgroundColor: '#ffffff',
+              color: '#1f2937',
+            }}
+          />
+        </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 12, fontWeight: '500', color: '#374151', marginBottom: 4 }}>Tên <Text style={{ color: '#ef4444' }}>*</Text></Text>
+          <TextInput
+            value={lastName}
+            onChangeText={setLastName}
+            placeholder="Nhập tên (VD: Văn A)"
             style={{
               paddingHorizontal: 12,
               paddingVertical: 8,
@@ -208,7 +231,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onClose }) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={onSave}
-            disabled={isLoading || !name || !age || !location || !height || !weight}
+            disabled={isLoading || !firstName || !lastName || !age || !height || !weight}
             style={{
               flex: 1,
               paddingHorizontal: 16,

@@ -15,8 +15,8 @@ export const useLogin = (onLogin: () => void) => {
 
   const handlePhoneSubmit = useCallback(() => {
     const currentPhone = phoneRef.current;
-    if (currentPhone.length < 9) {
-      setError('Vui lòng nhập số điện thoại hợp lệ.');
+    if (currentPhone.length < 3) {
+      setError('Vui lòng nhập username hoặc số điện thoại.');
       return;
     }
     setError('');

@@ -3,7 +3,7 @@
  * Axios instance với interceptors cho authentication và error handling
  */
 
-import axios, { AxiosInstance, AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_CONFIG, AUTH_ENDPOINTS } from './apiConfig';
 
@@ -36,7 +36,7 @@ const httpClient: AxiosInstance = axios.create({
 
 // Request Interceptor - Thêm token vào header
 httpClient.interceptors.request.use(
-  async (config: InternalAxiosRequestConfig) => {
+  async (config: AxiosRequestConfig) => {
     try {
       // Lấy token từ AsyncStorage
       const token = await AsyncStorage.getItem('access_token');
@@ -79,7 +79,7 @@ httpClient.interceptors.response.use(
           if (originalRequest.headers) {
             originalRequest.headers.Authorization = `Bearer ${token}`;
           }
-          return httpClient(originalRequest);
+          return httpClient.request(originalRequest);
         }).catch(err => {
           return Promise.reject(err);
         });
@@ -119,7 +119,7 @@ httpClient.interceptors.response.use(
             isRefreshing = false;
             
             console.log('[Auth] Re-authentication successful, retrying original request');
-            return httpClient(originalRequest);
+            return httpClient.request(originalRequest);
           }
         }
         

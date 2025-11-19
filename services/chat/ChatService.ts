@@ -6,11 +6,30 @@ const API_PREFIX = '/api/v1/online-shopping/public';
 
 class ChatService {
   /**
+   * Start a new conversation with a seller (or get existing one)
+   */
+  async startConversation(sellerId: string): Promise<ChatConversation> {
+    try {
+      const response = await httpClient.post(
+        `${CHAT_BASE_URL}${API_PREFIX}/buyer/chat/conversations/start`,
+        null,
+        {
+          params: { seller_id: sellerId }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Failed to start conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Get all conversations for the current buyer/customer
    */
   async getConversations(): Promise<ChatConversation[]> {
     try {
-      const response = await httpClient.get<ChatConversation[]>(
+      const response = await httpClient.get(
         `${CHAT_BASE_URL}${API_PREFIX}/buyer/chat/conversations`
       );
       return response.data;
@@ -25,13 +44,22 @@ class ChatService {
    */
   async getMessages(conversationId: string, limit = 50, offset = 0): Promise<ChatMessage[]> {
     try {
-      const response = await httpClient.get<ChatMessage[]>(
+      const response = await httpClient.get(
         `${CHAT_BASE_URL}${API_PREFIX}/buyer/chat/conversations/${conversationId}/messages`,
         {
           params: { limit, offset }
         }
       );
-      return response.data;
+      
+      // Map snake_case response to camelCase
+      return response.data.map((msg: any) => ({
+        id: msg.id,
+        senderId: msg.sender_id || msg.senderId,
+        senderType: msg.sender_type || msg.senderType,
+        text: msg.text,
+        attachments: msg.attachments,
+        timestamp: msg.created_at || msg.timestamp
+      }));
     } catch (error) {
       console.error('Failed to fetch messages:', error);
       throw error;

@@ -11,13 +11,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
     setStep,
     phone,
     setPhone,
-    otp,
-    setOtp,
+    password,
+    setPassword,
     isLoading,
     error,
     setError,
     handlePhoneSubmit,
-    handleOtpSubmit,
+    handlePasswordSubmit,
   } = useLogin(onLogin);
 
   return (
@@ -75,30 +75,29 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
             {step === 1 ? (
               <View>
                 <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center', color: '#374151', marginBottom: 24 }}>
-                  Nhập số điện thoại của bạn
+                  Đăng nhập
                 </Text>
 
                 <TextInput
-                  keyboardType="phone-pad"
-                  autoComplete="tel"
+                  autoComplete="username"
+                  autoCapitalize="none"
                   value={phone}
                   onChangeText={(value) => {
                     setPhone(value);
                     setError('');
                   }}
-                  placeholder="0901234567"
+                  placeholder="Username hoặc số điện thoại"
                   placeholderTextColor="#999"
                   editable={!isLoading}
                   style={{
-                    backgroundColor: '#1f2937',
-                    color: '#ffffff',
+                    backgroundColor: '#f3f4f6',
+                    color: '#1f2937',
                     paddingHorizontal: 16,
                     paddingVertical: 12,
                     fontSize: 16,
-                    textAlign: 'center',
                     borderRadius: 8,
                     borderWidth: 1,
-                    borderColor: '#374151',
+                    borderColor: '#d1d5db',
                     marginBottom: 16,
                   }}
                 />
@@ -111,9 +110,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
 
                 <TouchableOpacity
                   onPress={handlePhoneSubmit}
-                  disabled={isLoading || phone.length < 9}
+                  disabled={isLoading || phone.length < 3}
                   style={{
-                    backgroundColor: isLoading || phone.length < 9 ? '#a7f3d0' : '#10b981',
+                    backgroundColor: isLoading || phone.length < 3 ? '#a7f3d0' : '#10b981',
                     paddingHorizontal: 16,
                     paddingVertical: 12,
                     borderRadius: 8,
@@ -124,46 +123,41 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                   {isLoading ? (
                     <ActivityIndicator color="white" size="small" />
                   ) : (
-                    <Text style={{ color: '#ffffff', fontSize: 16, fontWeight: '600' }}>Gửi OTP</Text>
+                    <Text style={{ color: '#ffffff', fontSize: 16, fontWeight: '600' }}>Tiếp tục</Text>
                   )}
                 </TouchableOpacity>
               </View>
             ) : (
               <View>
-                <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center', color: '#374151', marginBottom: 24 }}>
-                  Nhập mã OTP
+                <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center', color: '#374151', marginBottom: 8 }}>
+                  Nhập mật khẩu
                 </Text>
 
                 <Text style={{ fontSize: 14, textAlign: 'center', color: '#6b7280', marginBottom: 24 }}>
-                  Mã gồm 6 chữ số đã được gửi đến {phone}.{'\n'}(Gợi ý: mã là 123456)
+                  Đăng nhập với tài khoản: {phone}
                 </Text>
 
                 <TextInput
-                  keyboardType="number-pad"
-                  maxLength={6}
-                  value={otp}
+                  secureTextEntry
+                  autoComplete="password"
+                  value={password}
                   onChangeText={(value) => {
-                    // Ensure only 6 digits are accepted
-                    const numericValue = value.replace(/[^0-9]/g, '').slice(0, 6);
-                    setOtp(numericValue);
+                    setPassword(value);
                     setError('');
                   }}
-                  placeholder="______"
-                  placeholderTextColor="#ccc"
+                  placeholder="Nhập mật khẩu"
+                  placeholderTextColor="#999"
                   editable={!isLoading}
                   style={{
                     backgroundColor: '#f3f4f6',
                     color: '#1f2937',
                     paddingHorizontal: 16,
                     paddingVertical: 12,
-                    fontSize: 24,
-                    textAlign: 'center',
-                    letterSpacing: 8,
+                    fontSize: 16,
                     borderRadius: 8,
                     borderWidth: 1,
                     borderColor: '#d1d5db',
                     marginBottom: 16,
-                    fontFamily: 'Courier',
                   }}
                 />
 
@@ -174,10 +168,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                 )}
 
                 <TouchableOpacity
-                  onPress={handleOtpSubmit}
-                  disabled={isLoading || otp.length !== 6}
+                  onPress={handlePasswordSubmit}
+                  disabled={isLoading || password.length < 6}
                   style={{
-                    backgroundColor: isLoading || otp.length !== 6 ? '#a7f3d0' : '#10b981',
+                    backgroundColor: isLoading || password.length < 6 ? '#a7f3d0' : '#10b981',
                     paddingHorizontal: 16,
                     paddingVertical: 12,
                     borderRadius: 8,
@@ -197,7 +191,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                   onPress={() => {
                     setStep(1);
                     setError('');
-                    setOtp('');
+                    setPassword('');
                   }}
                   disabled={isLoading}
                 >

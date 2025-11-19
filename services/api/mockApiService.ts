@@ -5,7 +5,7 @@ export const MOCK_USER: User = {
   phone: '0901234567',
   name: 'Nguyễn Văn A',
   age: 30,
-  location: 'Hồ Chí Minh',
+  location: ['Hồ Chí Minh'],
   height: 175,
   weight: 70,
   activityLevel: 'medium',
@@ -13,8 +13,8 @@ export const MOCK_USER: User = {
   budget: 1500000,
   walletBalance: 500000, // 500k VND
   familyMembers: [
-    { name: 'Nguyễn Thị B', age: 28, location: 'Hồ Chí Minh', height: 165, weight: 55, activityLevel: 'medium', allergies: [] },
-    { name: 'Nguyễn Văn C', age: 5, location: 'Hồ Chí Minh', height: 110, weight: 20, activityLevel: 'high', allergies: ['Sữa'] },
+    { name: 'Nguyễn Thị B', age: 28, location: ['Hồ Chí Minh'], height: 165, weight: 55, activityLevel: 'medium', allergies: [] },
+    { name: 'Nguyễn Văn C', age: 5, location: ['Hồ Chí Minh'], height: 110, weight: 20, activityLevel: 'high', allergies: ['Sữa'] },
   ],
 };
 

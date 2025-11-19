@@ -118,7 +118,7 @@ class AuthService {
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
-      const response = await httpClient.post<BackendLoginResponse>(
+      const response = await httpClient.post(
         AUTH_ENDPOINTS.LOGIN,
         {
           username: credentials.username,
@@ -157,7 +157,7 @@ class AuthService {
     if (!this.accessToken) return;
 
     try {
-      const response = await httpClient.post<BackendTokenVerifyResponse>(
+      const response = await httpClient.post(
         AUTH_ENDPOINTS.VERIFY_TOKEN,
         { token: this.accessToken }
       );
@@ -187,12 +187,7 @@ class AuthService {
     if (!this.accessToken) return null;
 
     try {
-      const response = await httpClient.get<{
-        user_id: string;
-        user_role: string;
-        username: string;
-        email: string;
-      }>(AUTH_ENDPOINTS.USER_INFO, {
+      const response = await httpClient.get(AUTH_ENDPOINTS.USER_INFO, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
         },
