@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Product } from '../../../types';
-import { fetchProducts } from '../../../services/api/mockApiService';
+import CatalogService from '../../../services/catalog/CatalogService';
 
 export enum ShoppingMode {
   AI,
@@ -47,8 +47,29 @@ export const useShopping = () => {
   const loadProducts = useCallback(async (currentSearchTerm: string) => {
     setIsLoading(true);
     try {
-      const fetchedProducts = await fetchProducts(currentSearchTerm);
-      setProducts(fetchedProducts);
+      const response = await CatalogService.getAllProducts({
+        page: 1,
+        page_limit: 50,
+        product_name: currentSearchTerm || undefined,
+        sort_by_price: 'increase',
+      });
+
+      // Flatten products from all stores
+      const allProducts: Product[] = [];
+      response.data.forEach((storeData) => {
+        storeData.products.forEach((product) => {
+          allProducts.push({
+            id: product.id,
+            name: product.product_name,
+            imageUrl: product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : '',
+            price: product.price,
+            store: product.store_id,
+            category: product.category,
+          });
+        });
+      });
+
+      setProducts(allProducts);
     } catch (error) {
       console.error("Failed to fetch products", error);
     } finally {

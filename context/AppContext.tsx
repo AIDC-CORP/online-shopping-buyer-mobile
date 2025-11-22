@@ -1,12 +1,14 @@
 
 import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
+import { Alert } from 'react-native';
 import { User, CartItem, Product, WalletTransaction } from '../types';
+import CartService from '../services/cart/CartService';
 
 interface AppContextType {
   user: User | null;
   setUser: (user: User) => void;
   cart: CartItem[];
-  addToCart: (product: Product, quantity?: number) => void;
+  addToCart: (product: Product, quantity?: number) => Promise<void>;
   removeFromCart: (productId: string) => void;
   updateCartItemQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -29,18 +31,33 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   const [cart, setCart] = useState<CartItem[]>([]);
   const [walletTransactions, setWalletTransactions] = useState<WalletTransaction[]>([]);
 
-  const addToCart = useCallback((product: Product, quantity: number = 1) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.product.id === product.id);
-      if (existingItem) {
-        return prevCart.map(item =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      }
-      return [...prevCart, { product, quantity }];
-    });
+  const addToCart = useCallback(async (product: Product, quantity: number = 1) => {
+    try {
+      // Call API to add to cart
+      await CartService.addToCart({
+        product_id: product.id,
+        quantity: quantity,
+      });
+      
+      // Show success message
+      Alert.alert('Thành công', `Đã thêm ${product.name} vào giỏ hàng`);
+      
+      // Update local cart state (optional - cart screen will fetch from API)
+      setCart(prevCart => {
+        const existingItem = prevCart.find(item => item.product.id === product.id);
+        if (existingItem) {
+          return prevCart.map(item =>
+            item.product.id === product.id
+              ? { ...item, quantity: item.quantity + quantity }
+              : item
+          );
+        }
+        return [...prevCart, { product, quantity }];
+      });
+    } catch (error: any) {
+      console.error('Failed to add to cart:', error);
+      Alert.alert('Lỗi', error.message || 'Không thể thêm sản phẩm vào giỏ hàng');
+    }
   }, []);
 
   const removeFromCart = useCallback((productId: string) => {

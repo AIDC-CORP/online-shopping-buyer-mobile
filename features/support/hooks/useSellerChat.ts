@@ -1,3 +1,4 @@
+import { AuthContextType } from './../../../../Attendance-Mobile-Ios/src/types/index';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { ChatMessage } from '../../../types';
@@ -126,7 +127,6 @@ export const useSellerChat = () => {
     try {
       // Send via WebSocket
       ChatService.sendWebSocketMessage(wsRef.current, {
-        type: 'message',
         text: input,
       });
     } catch (error) {
