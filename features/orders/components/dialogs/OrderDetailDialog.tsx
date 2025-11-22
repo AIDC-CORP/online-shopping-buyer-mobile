@@ -24,11 +24,26 @@ interface OrderDetailDialogProps {
 }
 
 const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ visible, onClose, order }) => {
-    const { handleBuyAgain } = useOrderDetail(order);
+    const { orderDetail, isLoading, handleBuyAgain } = useOrderDetail(order);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
 
-    const orderStatus = statusMap[order.status] || statusMap.pending;
+    const orderStatus = statusMap[orderDetail.status] || statusMap.pending;
+
+    if (isLoading) {
+        return (
+            <Modal
+                visible={visible}
+                onRequestClose={onClose}
+                animationType="slide"
+                presentationStyle="pageSheet"
+            >
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f9fafb' }}>
+                    <Text style={{ fontSize: 16, color: '#6b7280' }}>Đang tải...</Text>
+                </View>
+            </Modal>
+        );
+    }
 
     return (
         <Modal
@@ -39,7 +54,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ visible, onClose,
         >
             <View style={{ flex: 1, backgroundColor: '#f9fafb', padding: 16 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                    <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1f2937' }}>Chi tiết đơn hàng #{order.id}</Text>
+                    <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1f2937' }}>Chi tiết đơn hàng #{orderDetail.id}</Text>
                     <TouchableOpacity
                         onPress={onClose}
                         style={{ padding: 8 }}
@@ -61,7 +76,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ visible, onClose,
                       paddingVertical: 24,
                     }}>
                         <View style={{ marginBottom: 24 }}>
-                            <Text style={{ color: '#6b7280', marginTop: 4 }}>Ngày đặt: {new Date(order.date).toLocaleDateString('vi-VN')}</Text>
+                            <Text style={{ color: '#6b7280', marginTop: 4 }}>Ngày đặt: {orderDetail.date}</Text>
                             <View style={{ marginTop: 12, alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 6, backgroundColor: orderStatus.bg, borderRadius: 9999 }}>
                                 <Text style={{ fontSize: 12, fontWeight: '600', color: orderStatus.text_clr }}>
                                     {orderStatus.text}
@@ -70,7 +85,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ visible, onClose,
                         </View>
 
                         <View style={{ borderTopWidth: 1, borderTopColor: '#e5e7eb', paddingTop: 16, gap: 16 }}>
-                            {order.items.map((item: CartItem, index: number) => (
+                            {orderDetail.items.map((item: CartItem, index: number) => (
                                 <View key={index} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
                                         <Image source={{ uri: item.product.imageUrl }} style={{ width: 64, height: 64, borderRadius: 8 }} resizeMode="cover" />
@@ -86,10 +101,10 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ visible, onClose,
 
                         <View style={{ borderTopWidth: 1, borderTopColor: '#e5e7eb', marginTop: 16, paddingTop: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1f2937' }}>Tổng cộng</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#059669' }}>{formatCurrency(order.total)}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#059669' }}>{formatCurrency(orderDetail.total)}</Text>
                         </View>
 
-                        {order.status === 'completed' && (
+                        {orderDetail.status === 'completed' && (
                             <View style={{ marginTop: 16 }}>
                                 <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1f2937', marginBottom: 8 }}>Đánh giá đơn hàng</Text>
                                 <View style={{ flexDirection: 'row', marginBottom: 16 }}>

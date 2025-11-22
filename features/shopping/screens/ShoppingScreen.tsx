@@ -1,16 +1,55 @@
 
-import React from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import Spinner from '../../../components/common/Spinner';
 import AiMenuSuggestion from '../components/AiMenuSuggestion';
 import ProductList from '../components/ProductList';
 import { useShopping, ShoppingMode } from '../hooks/useShopping';
+import { useProducts } from '../hooks/useProducts';
 
 const ShoppingScreen: React.FC = () => {
-  const { mode, setMode, products, isLoading, searchTerm, setSearchTerm, handleSearch } = useShopping();
+  const { mode, setMode, isLoadingMode } = useShopping();
+  const { 
+    products, 
+    isLoading, 
+    isLoadingMore,
+    error,
+    hasMore,
+    loadMore, 
+    refresh, 
+    search, 
+    sort,
+    searchTerm,
+    sortBy
+  } = useProducts();
+  
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
+
+  const handleSearch = () => {
+    search(localSearchTerm);
+  };
+
+  const handleSortChange = (sortOrder: 'increase' | 'decrease' | undefined) => {
+    sort(sortOrder);
+  };
+
+  // Show loading while fetching saved mode
+  if (isLoadingMode) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f9fafb' }}>
+        <ActivityIndicator size="large" color="#10b981" />
+      </View>
+    );
+  }
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#f9fafb' }} contentContainerStyle={{ paddingHorizontal: 0, paddingVertical: 16 }}>
+    <ScrollView 
+      style={{ flex: 1, backgroundColor: '#f9fafb' }} 
+      contentContainerStyle={{ paddingHorizontal: 0, paddingVertical: 16 }}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={refresh} colors={['#10b981']} />
+      }
+    >
       <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#1f2937', marginBottom: 16, paddingHorizontal: 16 }}>Lên kế hoạch bữa ăn</Text>
 
       <View style={{ flexDirection: 'row', backgroundColor: '#e5e7eb', borderRadius: 8, padding: 4, marginBottom: 16, marginHorizontal: 16 }}>
@@ -68,8 +107,8 @@ const ShoppingScreen: React.FC = () => {
           <View>
             <View style={{ flexDirection: 'row', gap: 8, marginBottom: 16 }}>
               <TextInput
-                value={searchTerm}
-                onChangeText={setSearchTerm}
+                value={localSearchTerm}
+                onChangeText={setLocalSearchTerm}
                 onSubmitEditing={handleSearch}
                 placeholder="Tìm kiếm sản phẩm..."
                 placeholderTextColor="#9ca3af"
@@ -99,7 +138,82 @@ const ShoppingScreen: React.FC = () => {
                 <Text style={{ color: '#ffffff', fontWeight: '600', fontSize: 14 }}>Tìm</Text>
               </TouchableOpacity>
             </View>
-            {isLoading ? <Spinner /> : <ProductList products={products} />}
+
+            {/* Sort filter */}
+            <View style={{ flexDirection: 'row', gap: 8, marginBottom: 16 }}>
+              <TouchableOpacity
+                onPress={() => handleSortChange(undefined)}
+                style={{
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  backgroundColor: !sortBy ? '#10b981' : '#e5e7eb',
+                  borderRadius: 8,
+                }}
+              >
+                <Text style={{ color: !sortBy ? '#ffffff' : '#6b7280', fontSize: 12, fontWeight: '600' }}>
+                  Mặc định
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleSortChange('increase')}
+                style={{
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  backgroundColor: sortBy === 'increase' ? '#10b981' : '#e5e7eb',
+                  borderRadius: 8,
+                }}
+              >
+                <Text style={{ color: sortBy === 'increase' ? '#ffffff' : '#6b7280', fontSize: 12, fontWeight: '600' }}>
+                  Giá tăng dần
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleSortChange('decrease')}
+                style={{
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  backgroundColor: sortBy === 'decrease' ? '#10b981' : '#e5e7eb',
+                  borderRadius: 8,
+                }}
+              >
+                <Text style={{ color: sortBy === 'decrease' ? '#ffffff' : '#6b7280', fontSize: 12, fontWeight: '600' }}>
+                  Giá giảm dần
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {error && (
+              <View style={{ padding: 16, backgroundColor: '#fee2e2', borderRadius: 8, marginBottom: 16 }}>
+                <Text style={{ color: '#dc2626' }}>{error}</Text>
+              </View>
+            )}
+            
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                <ProductList products={products} />
+                {hasMore && (
+                  <TouchableOpacity
+                    onPress={loadMore}
+                    disabled={isLoadingMore}
+                    style={{
+                      marginTop: 16,
+                      paddingVertical: 12,
+                      backgroundColor: isLoadingMore ? '#e5e7eb' : '#10b981',
+                      borderRadius: 8,
+                      alignItems: 'center',
+                    }}
+                  >
+                    {isLoadingMore ? (
+                      <ActivityIndicator color="#6b7280" />
+                    ) : (
+                      <Text style={{ color: '#ffffff', fontWeight: '600' }}>Xem thêm</Text>
+                    )}
+                  </TouchableOpacity>
+                )}
+              </>
+            )}
           </View>
         )}
       </View>

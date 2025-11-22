@@ -1,3 +1,4 @@
+import { AuthContextType } from './../../../../Attendance-Mobile-Ios/src/types/index';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { ChatMessage } from '../../../types';
@@ -62,9 +63,17 @@ export const useSellerChat = () => {
               
               // Only add messages from seller (not our own echoed messages)
               if ((data.type === 'message' || data.id) && data.senderType === 'seller') {
+                const messageText = data.text || data.content || '';
+                
+                // Skip if no text
+                if (!messageText || messageText.trim() === '') {
+                  console.log('[Buyer WebSocket] Skipping empty message');
+                  return;
+                }
+                
                 const newMessage: ChatMessage = {
                   id: data.id || Date.now().toString(),
-                  text: data.text || data.content,
+                  text: messageText,
                   sender: 'bot', // Messages from seller
                 };
                 console.log('[Buyer WebSocket] Adding seller message:', newMessage);
@@ -118,7 +127,6 @@ export const useSellerChat = () => {
     try {
       // Send via WebSocket
       ChatService.sendWebSocketMessage(wsRef.current, {
-        type: 'message',
         text: input,
       });
     } catch (error) {

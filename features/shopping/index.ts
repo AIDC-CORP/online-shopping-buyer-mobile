@@ -1,4 +1,5 @@
 import { Product } from '../../types';
+import { ProductsByStore } from '../../services/catalog/CatalogService';
 
 export interface ShoppingScreenProps {
   // Add any props that ShoppingScreen might need in the future
@@ -9,7 +10,7 @@ export interface ProductCardProps {
 }
 
 export interface ProductListProps {
-  products: Product[];
+  products: ProductsByStore[];
 }
 
 export interface Meal {

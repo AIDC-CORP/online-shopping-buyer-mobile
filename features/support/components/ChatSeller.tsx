@@ -58,7 +58,7 @@ const SellerChatScreen: React.FC = () => {
                     }}>
                         <Text style={{ color: item.sender === 'user' ? '#ffffff' : '#1f2937' }}>{item.text}</Text>
                     </View>
-                    {item.sender === 'user' && <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#d1d5db', alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#4b5563', fontSize: 12, fontWeight: 'bold' }}>{user?.name.charAt(0)}</Text></View>}
+                    {item.sender === 'user' && <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#d1d5db', alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#4b5563', fontSize: 12, fontWeight: 'bold' }}>{user?.name?.charAt(0) || 'U'}</Text></View>}
                 </View>
             ))}
             {isLoading && (
