@@ -6,6 +6,7 @@
 import { httpClient } from '../auth/config';
 
 const CATALOG_BASE_URL = process.env.EXPO_PUBLIC_CATALOG_URL || 'http://192.168.1.4:8115';
+const PROFILE_BASE_URL = process.env.EXPO_PUBLIC_PROFILE_URL || 'http://192.168.1.4:8113';
 const API_PREFIX = '/api/v1/online-shopping/public';
 
 export type ProductCategory = 
@@ -130,9 +131,29 @@ class CatalogService {
       const storesData: ProductsByStore[] = [];
       
       if (backendData.stores) {
+        // Get store names for all store IDs
+        const storeIds = Object.keys(backendData.stores);
+        const storeNames: { [key: string]: string } = {};
+        
+        // Fetch store names in parallel
+        await Promise.all(
+          storeIds.map(async (storeId) => {
+            try {
+              const storeResponse = await httpClient.get(
+                `${PROFILE_BASE_URL}${API_PREFIX}/profile/stores/${storeId}`
+              );
+              storeNames[storeId] = storeResponse.data.store_name || 'Cửa hàng';
+            } catch (error) {
+              console.warn(`[CatalogService] Could not fetch store name for ${storeId}`);
+              storeNames[storeId] = 'Cửa hàng';
+            }
+          })
+        );
+        
         Object.entries(backendData.stores).forEach(([storeId, products]: [string, any]) => {
           storesData.push({
             store_id: storeId,
+            store_name: storeNames[storeId],
             products: Array.isArray(products) ? products : [],
             total_products: Array.isArray(products) ? products.length : 0,
           });

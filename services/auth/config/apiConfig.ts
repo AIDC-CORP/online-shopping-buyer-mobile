@@ -6,7 +6,7 @@
 // Base URL của backend API
 export const API_CONFIG = {
   // Development
-  BASE_URL: process.env.EXPO_PUBLIC_API_URL || 'http://192.168.1.4:8111',
+  BASE_URL: process.env.EXPO_PUBLIC_API_URL,
   
   // Production (thay đổi khi deploy)
   // BASE_URL: 'https://api.yourdomain.com',
